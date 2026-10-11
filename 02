@@ -1,0 +1,730 @@
+EXPERIMENT 2: ONLINE HOTEL ROOM BOOKING SYSTEM
+1. AIM
+To design and develop an Online Hotel Room Booking System using HTML, CSS, and JavaScript to display available rooms, select room types, calculate booking costs, and confirm reservations.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage to display hotel details and available rooms.
+3. Design the webpage using HTML and CSS.
+4. Display different room types with their prices and facilities.
+5. Allow users to select a room type and enter check-in and check-out dates.
+6. Accept the number of guests.
+7. Calculate the total booking cost based on the room price and number of nights.
+8. Validate the booking details before confirmation.
+9. Display the booking summary and confirmation message.
+10. Stop the program.
+3. HTML CODE
+Filename: experiment2_hotel.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrandStay Hotel Booking</title>
+    <link rel="stylesheet" href="experiment2_hotel.css">
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>🏨 GrandStay Hotel</h1>
+        <p>Your comfort, our priority</p>
+    </div>
+    <span class="badge">Online Booking</span>
+</header>
+
+<nav>
+    <a href="#rooms">Available Rooms</a>
+    <a href="#booking">Book a Room</a>
+    <a href="#facilities">Facilities</a>
+</nav>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>Experience Comfort & Luxury</h2>
+        <p>Find your perfect stay with our comfortable rooms and excellent facilities.</p>
+        <a href="#booking" class="hero-button">Book Your Stay</a>
+    </div>
+</section>
+
+<main>
+
+    <!-- Available Rooms -->
+    <section id="rooms" class="section">
+        <h2>Our Available Rooms</h2>
+        <p class="subtitle">Choose the room that suits your needs.</p>
+
+        <div class="room-container">
+
+            <div class="room-card">
+                <div class="room-icon">🛏️</div>
+                <h3>Standard Room</h3>
+                <p>Comfortable room for individual travellers.</p>
+                <ul>
+                    <li>Free Wi-Fi</li>
+                    <li>Air Conditioning</li>
+                    <li>Single or Double Bed</li>
+                </ul>
+                <h3 class="price">₹2,000 <small>/ night</small></h3>
+                <button onclick="selectRoom('Standard', 2000)">
+                    Select Room
+                </button>
+            </div>
+
+            <div class="room-card featured">
+                <div class="room-icon">🌟</div>
+                <span class="popular">POPULAR</span>
+                <h3>Deluxe Room</h3>
+                <p>A spacious room with premium comfort.</p>
+                <ul>
+                    <li>Free Wi-Fi</li>
+                    <li>Air Conditioning</li>
+                    <li>Premium Bed</li>
+                </ul>
+                <h3 class="price">₹3,500 <small>/ night</small></h3>
+                <button onclick="selectRoom('Deluxe', 3500)">
+                    Select Room
+                </button>
+            </div>
+
+            <div class="room-card">
+                <div class="room-icon">👑</div>
+                <h3>Suite Room</h3>
+                <p>A luxurious room for a premium experience.</p>
+                <ul>
+                    <li>Free Wi-Fi</li>
+                    <li>Living Area</li>
+                    <li>Premium Facilities</li>
+                </ul>
+                <h3 class="price">₹5,000 <small>/ night</small></h3>
+                <button onclick="selectRoom('Suite', 5000)">
+                    Select Room
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section id="booking" class="section booking-section">
+        <h2>Book Your Stay</h2>
+        <p class="subtitle">Enter your details to reserve a room.</p>
+
+        <form id="bookingForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="guestName">Full Name</label>
+                    <input type="text" id="guestName"
+                           placeholder="Enter your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="guestEmail">Email Address</label>
+                    <input type="email" id="guestEmail"
+                           placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="roomType">Room Type</label>
+                    <select id="roomType" required>
+                        <option value="">Select a room</option>
+                        <option value="Standard">Standard Room - ₹2,000</option>
+                        <option value="Deluxe">Deluxe Room - ₹3,500</option>
+                        <option value="Suite">Suite Room - ₹5,000</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="guests">Number of Guests</label>
+                    <select id="guests" required>
+                        <option value="1">1 Guest</option>
+                        <option value="2">2 Guests</option>
+                        <option value="3">3 Guests</option>
+                        <option value="4">4 Guests</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkin">Check-in Date</label>
+                    <input type="date" id="checkin" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="checkout">Check-out Date</label>
+                    <input type="date" id="checkout" required>
+                </div>
+
+            </div>
+
+            <button type="button" class="secondary-button"
+                    onclick="calculateTotal()">
+                Calculate Total
+            </button>
+
+            <div id="priceSummary" class="price-summary hidden"></div>
+
+            <button type="submit" class="confirm-button">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <div id="bookingResult" class="booking-result hidden"></div>
+    </section>
+
+    <!-- Hotel Facilities -->
+    <section id="facilities" class="section">
+        <h2>Hotel Facilities</h2>
+
+        <div class="facility-container">
+            <div class="facility-card">
+                <span>📶</span>
+                <h3>Free Wi-Fi</h3>
+                <p>Stay connected throughout your visit.</p>
+            </div>
+
+            <div class="facility-card">
+                <span>🍽️</span>
+                <h3>Restaurant</h3>
+                <p>Enjoy delicious meals during your stay.</p>
+            </div>
+
+            <div class="facility-card">
+                <span>🚗</span>
+                <h3>Parking</h3>
+                <p>Convenient parking for hotel guests.</p>
+            </div>
+
+            <div class="facility-card">
+                <span>🛎️</span>
+                <h3>Room Service</h3>
+                <p>Enjoy convenient guest services.</p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 GrandStay Hotel | Online Hotel Room Booking System</p>
+</footer>
+
+<script src="experiment2_hotel.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment2_hotel.css
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #263238;
+    line-height: 1.6;
+}
+
+header {
+    background: #123b52;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+header p {
+    color: #d8e8ef;
+}
+
+.badge {
+    background: #e5b96b;
+    color: #123b52;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+nav {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+nav a {
+    color: #123b52;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #d29b42;
+}
+
+.hero {
+    min-height: 300px;
+    background: linear-gradient(120deg, #123b52, #32758a);
+    display: flex;
+    align-items: center;
+    padding: 45px 8%;
+    color: white;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero h2 {
+    font-size: 38px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 25px;
+    font-size: 17px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: #e5b96b;
+    color: #123b52;
+    padding: 12px 22px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.section {
+    max-width: 1150px;
+    margin: 45px auto;
+    padding: 0 22px;
+}
+
+.section > h2 {
+    text-align: center;
+    color: #123b52;
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #697781;
+    margin-bottom: 28px;
+}
+
+.room-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 22px;
+}
+
+.room-card {
+    position: relative;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e0e8ed;
+    box-shadow: 0 5px 18px #123b5210;
+    transition: transform 0.2s;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+}
+
+.featured {
+    border: 2px solid #e5b96b;
+}
+
+.room-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.room-card h3 {
+    color: #123b52;
+    margin-bottom: 8px;
+}
+
+.room-card p {
+    color: #697781;
+}
+
+.room-card ul {
+    padding-left: 20px;
+    margin: 15px 0;
+}
+
+.room-card li {
+    margin: 5px 0;
+}
+
+.popular {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 11px;
+    background: #fff0cf;
+    color: #825b16;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.price {
+    margin: 18px 0;
+    font-size: 23px;
+}
+
+.price small {
+    font-size: 13px;
+    color: #697781;
+}
+
+button {
+    border: none;
+    border-radius: 6px;
+    background: #176b82;
+    color: white;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #104c60;
+}
+
+.room-card button {
+    width: 100%;
+}
+
+.booking-section {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px #123b5210;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 7px;
+    color: #123b52;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd8df;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+input:focus, select:focus {
+    outline: 2px solid #8dc8d8;
+    border-color: #176b82;
+}
+
+.secondary-button {
+    margin-top: 22px;
+    background: #e5b96b;
+    color: #123b52;
+}
+
+.secondary-button:hover {
+    background: #d5a34d;
+}
+
+.confirm-button {
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    background: #23794f;
+}
+
+.confirm-button:hover {
+    background: #185c3a;
+}
+
+.price-summary {
+    margin-top: 20px;
+    padding: 18px;
+    background: #edf7fa;
+    border-left: 4px solid #176b82;
+    border-radius: 6px;
+}
+
+.price-summary h3 {
+    color: #123b52;
+    margin-bottom: 8px;
+}
+
+.booking-result {
+    margin-top: 22px;
+    padding: 22px;
+    border-radius: 8px;
+    background: #e8f7ed;
+    border: 1px solid #b4dfc2;
+    color: #185c3a;
+}
+
+.hidden {
+    display: none;
+}
+
+.facility-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.facility-card {
+    text-align: center;
+    background: white;
+    padding: 22px;
+    border-radius: 10px;
+    border: 1px solid #e0e8ed;
+}
+
+.facility-card span {
+    font-size: 35px;
+}
+
+.facility-card h3 {
+    color: #123b52;
+    margin: 10px 0;
+}
+
+.facility-card p {
+    color: #697781;
+}
+
+footer {
+    margin-top: 50px;
+    background: #123b52;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero h2 {
+        font-size: 29px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-section {
+        padding: 20px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment2_hotel.js
+// Room prices per night
+const roomPrices = {
+    Standard: 2000,
+    Deluxe: 3500,
+    Suite: 5000
+};
+
+// Set minimum check-in date to today
+const checkinInput = document.getElementById("checkin");
+const checkoutInput = document.getElementById("checkout");
+
+const today = new Date();
+const todayString = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0")
+].join("-");
+
+checkinInput.min = todayString;
+checkoutInput.min = todayString;
+
+// Update checkout date when check-in changes
+checkinInput.addEventListener("change", function() {
+    checkoutInput.min = checkinInput.value;
+
+    if (checkoutInput.value &&
+        checkoutInput.value <= checkinInput.value) {
+        checkoutInput.value = "";
+    }
+});
+
+// Select a room from the room cards
+function selectRoom(room, price) {
+    document.getElementById("roomType").value = room;
+
+    document.getElementById("booking").scrollIntoView({
+        behavior: "smooth"
+    });
+
+    alert(room + " Room selected.\nPrice per night: ₹" + price);
+}
+
+// Validate booking details and calculate total
+function getBookingDetails() {
+    const name = document.getElementById("guestName").value.trim();
+    const email = document.getElementById("guestEmail").value.trim();
+    const room = document.getElementById("roomType").value;
+    const guests = Number(document.getElementById("guests").value);
+    const checkin = checkinInput.value;
+    const checkout = checkoutInput.value;
+
+    if (!name || !email || !room || !checkin || !checkout) {
+        alert("Please fill in all booking details.");
+        return null;
+    }
+
+    if (!roomPrices[room]) {
+        alert("Please select a valid room type.");
+        return null;
+    }
+
+    if (guests < 1 || guests > 4) {
+        alert("Please select between 1 and 4 guests.");
+        return null;
+    }
+
+    if (checkin < todayString) {
+        alert("Check-in date cannot be in the past.");
+        return null;
+    }
+
+    const startDate = new Date(checkin + "T00:00:00");
+    const endDate = new Date(checkout + "T00:00:00");
+
+    if (endDate <= startDate) {
+        alert("Check-out date must be after check-in date.");
+        return null;
+    }
+
+    const nights = Math.round(
+        (endDate - startDate) / (1000 * 60 * 60 * 24)
+    );
+
+    const price = roomPrices[room];
+    const total = nights * price;
+
+    return {
+        name,
+        email,
+        room,
+        guests,
+        checkin,
+        checkout,
+        nights,
+        price,
+        total
+    };
+}
+
+// Calculate and display the total booking cost
+function calculateTotal() {
+    const booking = getBookingDetails();
+
+    if (!booking) {
+        return;
+    }
+
+    const summary = document.getElementById("priceSummary");
+
+    summary.innerHTML = `
+        <h3>Booking Price Summary</h3>
+        <p><strong>Room:</strong> ${booking.room}</p>
+        <p><strong>Guests:</strong> ${booking.guests}</p>
+        <p><strong>Number of Nights:</strong> ${booking.nights}</p>
+        <p><strong>Price Per Night:</strong> ₹${booking.price}</p>
+        <p><strong>Total Amount:</strong> ₹${booking.total}</p>
+    `;
+
+    summary.classList.remove("hidden");
+}
+
+// Confirm the booking
+document.getElementById("bookingForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const booking = getBookingDetails();
+
+        if (!booking) {
+            return;
+        }
+
+        const bookingId = "GS" + Date.now().toString().slice(-8);
+
+        const result = document.getElementById("bookingResult");
+
+        result.innerHTML = `
+            <h2>✅ Booking Confirmed!</h2>
+            <p>Thank you, ${booking.name}!</p>
+            <p><strong>Booking ID:</strong> ${bookingId}</p>
+            <p><strong>Email:</strong> ${booking.email}</p>
+            <p><strong>Room Type:</strong> ${booking.room}</p>
+            <p><strong>Number of Guests:</strong> ${booking.guests}</p>
+            <p><strong>Check-in:</strong> ${booking.checkin}</p>
+            <p><strong>Check-out:</strong> ${booking.checkout}</p>
+            <p><strong>Duration:</strong> ${booking.nights} night(s)</p>
+            <p><strong>Total Amount:</strong> ₹${booking.total}</p>
+            <p>Your booking details have been prepared successfully.</p>
+        `;
+
+        result.classList.remove("hidden");
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+6. RESULT
+Thus, the Online Hotel Room Booking System was designed and developed successfully using HTML, CSS, and JavaScript. The webpage displays different room types, allows users to select rooms, enter guest and date details, calculate the total booking cost, validate booking information, and display a booking confirmation with a booking ID.
