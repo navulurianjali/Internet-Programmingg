@@ -1,0 +1,886 @@
+EXPERIMENT 3: BUS TICKET BOOKING SYSTEM
+1. AIM
+To design and develop an Online Bus Ticket Booking System using HTML, CSS, and JavaScript to display available buses, select seats, enter passenger details, calculate ticket fares, and confirm bookings.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage displaying bus details and booking options.
+3. Design the webpage using HTML and CSS.
+4. Display available buses with their routes, departure times, and ticket prices.
+5. Allow users to select a bus and enter their journey details.
+6. Display available seats and allow users to select seats.
+7. Accept passenger details and validate the entered information.
+8. Calculate the total ticket fare based on the number of selected seats.
+9. Confirm the booking and generate a booking ID.
+10. Display the booking confirmation with passenger, bus, seat, and fare details.
+3. HTML CODE
+Filename: experiment3_bus.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Ticket Booking</title>
+    <link rel="stylesheet" href="experiment3_bus.css">
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>🚌 BusGo</h1>
+        <p>Your journey begins here</p>
+    </div>
+    <span class="badge">Easy Online Booking</span>
+</header>
+
+<nav>
+    <a href="#search">Search Buses</a>
+    <a href="#buses">Available Buses</a>
+    <a href="#booking">Book Tickets</a>
+</nav>
+
+<section class="hero">
+    <h2>Travel Smart. Travel Comfortably.</h2>
+    <p>Find your bus, choose your seat, and book your journey.</p>
+    <a href="#search" class="hero-button">Book Your Ticket</a>
+</section>
+
+<main>
+
+    <!-- Search Section -->
+    <section id="search" class="section">
+        <h2>Search Your Journey</h2>
+
+        <form id="searchForm" class="search-form">
+
+            <div>
+                <label for="from">From</label>
+                <input type="text" id="from"
+                       placeholder="Departure city" required>
+            </div>
+
+            <div>
+                <label for="to">To</label>
+                <input type="text" id="to"
+                       placeholder="Destination city" required>
+            </div>
+
+            <div>
+                <label for="journeyDate">Journey Date</label>
+                <input type="date" id="journeyDate" required>
+            </div>
+
+            <button type="submit">Search Buses</button>
+        </form>
+
+        <p id="searchMessage" class="message"></p>
+    </section>
+
+    <!-- Available Buses -->
+    <section id="buses" class="section">
+        <h2>Available Buses</h2>
+        <p class="subtitle">Choose the bus that suits your journey.</p>
+
+        <div id="busList" class="bus-container"></div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="section booking-section">
+        <h2>Book Your Tickets</h2>
+
+        <form id="bookingForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="selectedBus">Selected Bus</label>
+                    <select id="selectedBus" required>
+                        <option value="">Select a bus</option>
+                        <option value="1">Express Travels</option>
+                        <option value="2">Royal Roadways</option>
+                        <option value="3">GreenLine Travels</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="passengerName">Passenger Name</label>
+                    <input type="text" id="passengerName"
+                           placeholder="Enter full name" required>
+                </div>
+
+                <div>
+                    <label for="passengerAge">Age</label>
+                    <input type="number" id="passengerAge"
+                           min="1" max="120" required>
+                </div>
+
+                <div>
+                    <label for="passengerPhone">Phone Number</label>
+                    <input type="tel" id="passengerPhone"
+                           pattern="[0-9]{10}"
+                           placeholder="10-digit mobile number" required>
+                </div>
+
+            </div>
+
+            <h3 class="seat-heading">Select Your Seats</h3>
+
+            <div class="seat-legend">
+                <span><i class="available"></i> Available</span>
+                <span><i class="selected"></i> Selected</span>
+                <span><i class="booked"></i> Booked</span>
+            </div>
+
+            <div class="bus-layout">
+                <div class="driver">🚍 Driver</div>
+                <div id="seatContainer" class="seat-container"></div>
+            </div>
+
+            <p id="seatMessage" class="message">
+                Please select your bus and seats.
+            </p>
+
+            <div class="fare-box">
+                <p>Selected Seats: <strong id="seatCount">0</strong></p>
+                <p>Price Per Seat: <strong id="seatPrice">₹0</strong></p>
+                <h3>Total Fare: <span id="totalFare">₹0</span></h3>
+            </div>
+
+            <button type="submit" class="confirm-button">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <div id="bookingResult" class="booking-result hidden"></div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 BusGo | Online Bus Ticket Booking System</p>
+</footer>
+
+<script src="experiment3_bus.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment3_bus.css
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #263238;
+    line-height: 1.6;
+}
+
+header {
+    background: #163b65;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+header p {
+    color: #d8e6f5;
+}
+
+.badge {
+    background: #f4c66a;
+    color: #163b65;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+nav {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+nav a {
+    text-decoration: none;
+    color: #163b65;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ed9d32;
+}
+
+.hero {
+    background: linear-gradient(120deg, #163b65, #247e9a);
+    color: white;
+    text-align: center;
+    padding: 55px 20px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 12px;
+}
+
+.hero p {
+    margin-bottom: 25px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: #f4c66a;
+    color: #163b65;
+    padding: 12px 22px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 22px;
+}
+
+.section h2 {
+    color: #163b65;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    color: #687783;
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #0000000b;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    color: #163b65;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd7e2;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+button {
+    border: none;
+    background: #176b91;
+    color: white;
+    padding: 12px 17px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: end;
+}
+
+button:hover {
+    background: #104b6b;
+}
+
+.message {
+    margin-top: 12px;
+    color: #176b47;
+    font-weight: bold;
+}
+
+.bus-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.bus-card {
+    background: white;
+    border: 1px solid #e0e7ef;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 4px 15px #0000000b;
+}
+
+.bus-card h3 {
+    color: #163b65;
+    margin-bottom: 12px;
+}
+
+.bus-card p {
+    margin: 8px 0;
+    color: #596b78;
+}
+
+.bus-card .bus-price {
+    color: #176b47;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.bus-card button {
+    width: 100%;
+}
+
+.booking-section {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.seat-heading {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    color: #163b65;
+}
+
+.seat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 18px;
+}
+
+.seat-legend span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.seat-legend i {
+    display: inline-block;
+    width: 17px;
+    height: 17px;
+    border-radius: 4px;
+}
+
+.available {
+    background: #e3f2e8;
+    border: 1px solid #63a87a;
+}
+
+.selected {
+    background: #176b91;
+}
+
+.booked {
+    background: #d7dce2;
+}
+
+.bus-layout {
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f2f6fa;
+    border: 2px solid #d4e0e9;
+    border-radius: 15px;
+}
+
+.driver {
+    text-align: right;
+    border-bottom: 1px dashed #aebdca;
+    padding-bottom: 15px;
+    margin-bottom: 18px;
+}
+
+.seat-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.seat {
+    padding: 12px 4px;
+    background: #e3f2e8;
+    color: #176b47;
+    border: 1px solid #63a87a;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.seat:hover {
+    background: #c6e6d1;
+}
+
+.seat.selected-seat {
+    background: #176b91;
+    color: white;
+    border-color: #176b91;
+}
+
+.seat.booked-seat {
+    background: #d7dce2;
+    color: #727b84;
+    border-color: #c1c8d0;
+    cursor: not-allowed;
+}
+
+.fare-box {
+    margin-top: 25px;
+    background: #eef6fa;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.fare-box p {
+    margin-bottom: 8px;
+}
+
+.fare-box h3 {
+    color: #176b47;
+    margin-top: 12px;
+}
+
+.confirm-button {
+    width: 100%;
+    margin-top: 20px;
+    background: #218453;
+}
+
+.confirm-button:hover {
+    background: #17653d;
+}
+
+.booking-result {
+    margin-top: 25px;
+    padding: 22px;
+    background: #e8f7ed;
+    border: 1px solid #b4dfc2;
+    border-radius: 8px;
+    color: #185c3a;
+    overflow-wrap: anywhere;
+}
+
+.booking-result h3 {
+    margin-bottom: 12px;
+}
+
+.booking-result p {
+    margin: 7px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 45px;
+    padding: 20px;
+    text-align: center;
+    background: #163b65;
+    color: white;
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-section {
+        padding: 18px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment3_bus.js
+// Bus details and ticket prices
+const buses = [
+    {
+        id: 1,
+        name: "Express Travels",
+        type: "AC Sleeper",
+        departure: "09:00 PM",
+        arrival: "06:00 AM",
+        price: 1200,
+        from: "Chennai",
+        to: "Bangalore"
+    },
+    {
+        id: 2,
+        name: "Royal Roadways",
+        type: "AC Seater",
+        departure: "08:00 AM",
+        arrival: "02:00 PM",
+        price: 750,
+        from: "Chennai",
+        to: "Bangalore"
+    },
+    {
+        id: 3,
+        name: "GreenLine Travels",
+        type: "Non-AC Sleeper",
+        departure: "10:00 PM",
+        arrival: "07:00 AM",
+        price: 900,
+        from: "Chennai",
+        to: "Hyderabad"
+    }
+];
+
+let selectedSeats = [];
+let currentBus = null;
+
+// Sample booked seats for each bus
+const bookedSeats = {
+    1: ["S2", "S6"],
+    2: ["S4", "S10"],
+    3: ["S1", "S8"]
+};
+
+// Set journey date minimum to today
+const journeyDateInput = document.getElementById("journeyDate");
+
+const now = new Date();
+const todayString = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+].join("-");
+
+journeyDateInput.min = todayString;
+journeyDateInput.value = todayString;
+
+// Display buses
+function renderBuses(list = buses) {
+    const busList = document.getElementById("busList");
+
+    if (list.length === 0) {
+        busList.innerHTML = "<p>No buses found for this route.</p>";
+        return;
+    }
+
+    busList.innerHTML = list.map(function(bus) {
+        return `
+            <div class="bus-card">
+                <h3>🚌 ${bus.name}</h3>
+                <p><strong>Type:</strong> ${bus.type}</p>
+                <p><strong>Route:</strong> ${bus.from} → ${bus.to}</p>
+                <p><strong>Departure:</strong> ${bus.departure}</p>
+                <p><strong>Arrival:</strong> ${bus.arrival}</p>
+                <p class="bus-price">₹${bus.price}</p>
+                <button onclick="chooseBus(${bus.id})">
+                    Select Bus
+                </button>
+            </div>
+        `;
+    }).join("");
+}
+
+// Search buses by route
+document.getElementById("searchForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const from = document.getElementById("from")
+            .value.trim().toLowerCase();
+
+        const to = document.getElementById("to")
+            .value.trim().toLowerCase();
+
+        const date = journeyDateInput.value;
+
+        if (!date || date < todayString) {
+            alert("Please select a valid journey date.");
+            return;
+        }
+
+        const filteredBuses = buses.filter(function(bus) {
+            return bus.from.toLowerCase() === from &&
+                   bus.to.toLowerCase() === to;
+        });
+
+        renderBuses(filteredBuses);
+
+        document.getElementById("searchMessage").textContent =
+            filteredBuses.length + " bus(es) found for " +
+            document.getElementById("from").value + " to " +
+            document.getElementById("to").value + " on " + date + ".";
+
+        document.getElementById("buses").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+);
+
+// Select a bus
+function chooseBus(id) {
+    currentBus = buses.find(function(bus) {
+        return bus.id === id;
+    });
+
+    if (!currentBus) return;
+
+    document.getElementById("selectedBus").value = String(id);
+
+    selectedSeats = [];
+
+    renderSeats();
+    updateFare();
+
+    document.getElementById("seatMessage").textContent =
+        currentBus.name + " selected. Please choose your seats.";
+
+    document.getElementById("booking").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// Update bus when selection changes
+document.getElementById("selectedBus").addEventListener(
+    "change",
+    function() {
+        const id = Number(this.value);
+
+        currentBus = buses.find(function(bus) {
+            return bus.id === id;
+        }) || null;
+
+        selectedSeats = [];
+
+        renderSeats();
+        updateFare();
+
+        document.getElementById("bookingResult").classList.add("hidden");
+
+        document.getElementById("seatMessage").textContent =
+            currentBus
+                ? currentBus.name + " selected. Please choose your seats."
+                : "Please select your bus and seats.";
+    }
+);
+
+// Display seat layout
+function renderSeats() {
+    const container = document.getElementById("seatContainer");
+
+    if (!currentBus) {
+        container.innerHTML =
+            "<p>Please select a bus to view seats.</p>";
+        return;
+    }
+
+    container.innerHTML = "";
+
+    for (let i = 1; i <= 12; i++) {
+        const seatName = "S" + i;
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.textContent = seatName;
+        button.className = "seat";
+
+        if (bookedSeats[currentBus.id].includes(seatName)) {
+            button.classList.add("booked-seat");
+            button.disabled = true;
+            button.title = "Already booked";
+        } else {
+            if (selectedSeats.includes(seatName)) {
+                button.classList.add("selected-seat");
+            }
+
+            button.addEventListener("click", function() {
+                toggleSeat(seatName);
+            });
+        }
+
+        container.appendChild(button);
+    }
+}
+
+// Select or deselect a seat
+function toggleSeat(seatName) {
+    if (!currentBus) return;
+
+    if (selectedSeats.includes(seatName)) {
+        selectedSeats = selectedSeats.filter(function(seat) {
+            return seat !== seatName;
+        });
+    } else {
+        selectedSeats.push(seatName);
+    }
+
+    renderSeats();
+    updateFare();
+
+    document.getElementById("seatMessage").textContent =
+        selectedSeats.length > 0
+            ? "Selected seats: " + selectedSeats.join(", ")
+            : "Please select at least one seat.";
+}
+
+// Calculate ticket fare
+function updateFare() {
+    const price = currentBus ? currentBus.price : 0;
+    const total = selectedSeats.length * price;
+
+    document.getElementById("seatCount").textContent =
+        selectedSeats.length;
+
+    document.getElementById("seatPrice").textContent =
+        "₹" + price;
+
+    document.getElementById("totalFare").textContent =
+        "₹" + total;
+}
+
+// Confirm booking
+document.getElementById("bookingForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const busId = Number(
+            document.getElementById("selectedBus").value
+        );
+
+        currentBus = buses.find(function(bus) {
+            return bus.id === busId;
+        }) || null;
+
+        const name = document.getElementById("passengerName")
+            .value.trim();
+
+        const age = Number(
+            document.getElementById("passengerAge").value
+        );
+
+        const phone = document.getElementById("passengerPhone")
+            .value.trim();
+
+        const journeyDate = journeyDateInput.value;
+
+        if (!currentBus) {
+            alert("Please select a bus.");
+            return;
+        }
+
+        if (!name || age < 1 || age > 120 || !/^[0-9]{10}$/.test(phone)) {
+            alert("Please enter valid passenger details.");
+            return;
+        }
+
+        if (!journeyDate || journeyDate < todayString) {
+            alert("Please select a valid journey date.");
+            return;
+        }
+
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return;
+        }
+
+        // Verify seats are still available
+        const alreadyBooked = selectedSeats.some(function(seat) {
+            return bookedSeats[currentBus.id].includes(seat);
+        });
+
+        if (alreadyBooked) {
+            alert("One or more seats are no longer available.");
+            selectedSeats = [];
+            renderSeats();
+            updateFare();
+            return;
+        }
+
+        const total = selectedSeats.length * currentBus.price;
+        const bookingId = "BG" + Date.now().toString().slice(-8);
+
+        // Mark selected seats as booked
+        bookedSeats[currentBus.id].push(...selectedSeats);
+
+        const result = document.getElementById("bookingResult");
+
+        result.innerHTML = `
+            <h3>✅ Ticket Booking Confirmed!</h3>
+            <p><strong>Booking ID:</strong> ${bookingId}</p>
+            <p><strong>Passenger:</strong> ${name}</p>
+            <p><strong>Age:</strong> ${age}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Bus:</strong> ${currentBus.name}</p>
+            <p><strong>Route:</strong> ${currentBus.from} → ${currentBus.to}</p>
+            <p><strong>Journey Date:</strong> ${journeyDate}</p>
+            <p><strong>Departure:</strong> ${currentBus.departure}</p>
+            <p><strong>Seats:</strong> ${selectedSeats.join(", ")}</p>
+            <p><strong>Number of Tickets:</strong> ${selectedSeats.length}</p>
+            <p><strong>Total Fare:</strong> ₹${total}</p>
+            <p>Please keep your booking ID for reference.</p>
+        `;
+
+        result.classList.remove("hidden");
+
+        selectedSeats = [];
+
+        renderSeats();
+        updateFare();
+
+        document.getElementById("seatMessage").textContent =
+            "Booking completed successfully.";
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+// Initialize the page
+renderBuses();
+renderSeats();
+updateFare();
+
+6. RESULT
+Thus, the Online Bus Ticket Booking System was designed and developed successfully using HTML, CSS, and JavaScript. The system displays available buses, supports route searching, allows users to select seats, calculates ticket fares, validates passenger details, and generates a booking confirmation with a unique booking ID.
