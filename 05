@@ -1,0 +1,752 @@
+EXPERIMENT 5: FLIGHT RESERVATION SYSTEM
+1. AIM
+To design and develop an Online Flight Reservation System using HTML, CSS, and JavaScript to search for flights, enter passenger details, select travel class, calculate ticket fares, and confirm flight reservations.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage for the online flight reservation system.
+3. Design the webpage using HTML and CSS.
+4. Display available flights with flight numbers, airlines, departure times, and ticket prices.
+5. Allow users to enter source, destination, and travel date.
+6. Display flights matching the selected route.
+7. Allow users to select a flight and enter passenger details.
+8. Provide options to select travel class and number of passengers.
+9. Validate the entered details and calculate the total ticket fare.
+10. Generate a booking reference and display the reservation confirmation.
+3. HTML CODE
+Filename: experiment5_flight.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyBook - Flight Reservation</title>
+    <link rel="stylesheet" href="experiment5_flight.css">
+</head>
+<body>
+
+<header>
+    <h1>✈ SkyBook</h1>
+    <p>Discover the world, one flight at a time.</p>
+</header>
+
+<nav>
+    <a href="#search">Search Flights</a>
+    <a href="#flights">Available Flights</a>
+    <a href="#booking">Book Tickets</a>
+</nav>
+
+<section class="hero">
+    <h2>Your Journey Begins Here</h2>
+    <p>Find your flight, choose your seat class, and fly comfortably.</p>
+    <a href="#search" class="hero-button">Explore Flights</a>
+</section>
+
+<main>
+
+    <section id="search" class="section">
+        <h2>Search Flights</h2>
+
+        <form id="searchForm" class="search-form">
+
+            <div>
+                <label for="source">From</label>
+                <input type="text" id="source"
+                       placeholder="Departure city" required>
+            </div>
+
+            <div>
+                <label for="destination">To</label>
+                <input type="text" id="destination"
+                       placeholder="Arrival city" required>
+            </div>
+
+            <div>
+                <label for="travelDate">Travel Date</label>
+                <input type="date" id="travelDate" required>
+            </div>
+
+            <button type="submit">Search Flights</button>
+
+        </form>
+
+        <p id="searchMessage" class="message"></p>
+    </section>
+
+    <section id="flights" class="section">
+        <h2>Available Flights</h2>
+        <p class="subtitle">Choose the flight that suits your journey.</p>
+
+        <div id="flightList" class="flight-container"></div>
+    </section>
+
+    <section id="booking" class="section booking-section">
+        <h2>Passenger Booking</h2>
+
+        <form id="bookingForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="selectedFlight">Select Flight</label>
+                    <select id="selectedFlight" required>
+                        <option value="">Choose a flight</option>
+                        <option value="1">Air India Express</option>
+                        <option value="2">IndiGo Airlines</option>
+                        <option value="3">SpiceJet</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="passengerName">Passenger Name</label>
+                    <input type="text" id="passengerName"
+                           placeholder="Enter full name" required>
+                </div>
+
+                <div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age"
+                           min="1" max="120" required>
+                </div>
+
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email"
+                           placeholder="Enter email" required>
+                </div>
+
+                <div>
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="phone"
+                           pattern="[0-9]{10}"
+                           placeholder="10-digit mobile number" required>
+                </div>
+
+                <div>
+                    <label for="travelClass">Travel Class</label>
+                    <select id="travelClass" required>
+                        <option value="Economy">Economy</option>
+                        <option value="Business">Business</option>
+                        <option value="First">First Class</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="passengers">Number of Passengers</label>
+                    <input type="number" id="passengers"
+                           min="1" max="6" value="1" required>
+                </div>
+
+            </div>
+
+            <div class="fare-box">
+                <p>Selected Flight:
+                    <strong id="flightName">Not selected</strong>
+                </p>
+
+                <p>Fare Per Passenger:
+                    <strong id="farePerPassenger">₹0</strong>
+                </p>
+
+                <h3>Total Fare:
+                    <span id="totalFare">₹0</span>
+                </h3>
+            </div>
+
+            <button type="submit" class="confirm-button">
+                Confirm Booking
+            </button>
+
+        </form>
+
+        <div id="bookingResult" class="booking-result hidden"></div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 SkyBook | Online Flight Reservation System</p>
+</footer>
+
+<script src="experiment5_flight.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment5_flight.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f6fb;
+    color: #263746;
+    line-height: 1.6;
+}
+
+header {
+    background: #102d50;
+    color: white;
+    padding: 22px 7%;
+}
+
+header h1 {
+    font-size: 30px;
+}
+
+header p {
+    color: #d5e3f3;
+}
+
+nav {
+    background: white;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 15px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+nav a {
+    text-decoration: none;
+    color: #102d50;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ed8c35;
+}
+
+.hero {
+    background: linear-gradient(120deg, #102d50, #287da0);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h2 {
+    font-size: 35px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    margin-bottom: 25px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: #f5c76b;
+    color: #102d50;
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 22px;
+}
+
+.section h2 {
+    color: #102d50;
+    margin-bottom: 18px;
+}
+
+.subtitle {
+    color: #687987;
+    margin-bottom: 20px;
+}
+
+.search-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #0000000b;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    color: #102d50;
+    margin-bottom: 7px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd6e0;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+}
+
+button {
+    padding: 12px 18px;
+    background: #176c91;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: end;
+}
+
+button:hover {
+    background: #104b6b;
+}
+
+.message {
+    margin-top: 12px;
+    color: #176b47;
+    font-weight: bold;
+}
+
+.flight-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.flight-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    border: 1px solid #e0e7ef;
+    box-shadow: 0 4px 15px #0000000b;
+}
+
+.flight-card h3 {
+    color: #102d50;
+    margin-bottom: 12px;
+}
+
+.flight-card p {
+    color: #5b6d7b;
+    margin: 8px 0;
+}
+
+.flight-price {
+    color: #18794e !important;
+    font-size: 21px;
+    font-weight: bold;
+    margin: 15px 0 !important;
+}
+
+.flight-card button {
+    width: 100%;
+}
+
+.booking-section {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.fare-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: #edf6fb;
+    border-radius: 8px;
+}
+
+.fare-box p {
+    margin-bottom: 8px;
+}
+
+.fare-box h3 {
+    color: #18794e;
+    margin-top: 12px;
+}
+
+.confirm-button {
+    width: 100%;
+    margin-top: 20px;
+    background: #218453;
+}
+
+.confirm-button:hover {
+    background: #17653d;
+}
+
+.booking-result {
+    margin-top: 25px;
+    padding: 22px;
+    background: #e8f7ed;
+    color: #185c3a;
+    border: 1px solid #b4dfc2;
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+
+.booking-result h3 {
+    margin-bottom: 12px;
+}
+
+.booking-result p {
+    margin: 7px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 45px;
+    padding: 20px;
+    text-align: center;
+    background: #102d50;
+    color: white;
+}
+
+@media (max-width: 650px) {
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-section {
+        padding: 18px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment5_flight.js
+// Sample flight details
+const flights = [
+    {
+        id: 1,
+        name: "Air India Express",
+        number: "IX-102",
+        source: "Chennai",
+        destination: "Delhi",
+        departure: "06:30 AM",
+        arrival: "09:30 AM",
+        economy: 4500,
+        business: 9000,
+        first: 14000
+    },
+    {
+        id: 2,
+        name: "IndiGo Airlines",
+        number: "6E-204",
+        source: "Chennai",
+        destination: "Bangalore",
+        departure: "10:00 AM",
+        arrival: "11:00 AM",
+        economy: 2500,
+        business: 6000,
+        first: 10000
+    },
+    {
+        id: 3,
+        name: "SpiceJet",
+        number: "SG-310",
+        source: "Chennai",
+        destination: "Hyderabad",
+        departure: "02:00 PM",
+        arrival: "03:30 PM",
+        economy: 3000,
+        business: 7000,
+        first: 11000
+    }
+];
+
+// Set minimum travel date to today
+const travelDateInput = document.getElementById("travelDate");
+
+const now = new Date();
+
+const todayString = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+].join("-");
+
+travelDateInput.min = todayString;
+travelDateInput.value = todayString;
+
+// Display flight cards
+function renderFlights(list = flights) {
+    const flightList = document.getElementById("flightList");
+
+    if (list.length === 0) {
+        flightList.innerHTML =
+            "<p>No flights found for the selected route.</p>";
+        return;
+    }
+
+    flightList.innerHTML = list.map(function(flight) {
+        return `
+            <div class="flight-card">
+                <h3>✈ ${flight.name}</h3>
+                <p><strong>Flight Number:</strong> ${flight.number}</p>
+                <p><strong>Route:</strong> ${flight.source} → ${flight.destination}</p>
+                <p><strong>Departure:</strong> ${flight.departure}</p>
+                <p><strong>Arrival:</strong> ${flight.arrival}</p>
+                <p class="flight-price">From ₹${flight.economy}</p>
+                <button onclick="selectFlight(${flight.id})">
+                    Select Flight
+                </button>
+            </div>
+        `;
+    }).join("");
+}
+
+// Search flights by route
+document.getElementById("searchForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const source = document.getElementById("source")
+            .value.trim().toLowerCase();
+
+        const destination = document.getElementById("destination")
+            .value.trim().toLowerCase();
+
+        const date = travelDateInput.value;
+
+        if (!date || date < todayString) {
+            alert("Please select a valid travel date.");
+            return;
+        }
+
+        const filteredFlights = flights.filter(function(flight) {
+            return flight.source.toLowerCase() === source &&
+                   flight.destination.toLowerCase() === destination;
+        });
+
+        renderFlights(filteredFlights);
+
+        document.getElementById("searchMessage").textContent =
+            filteredFlights.length + " flight(s) found for " +
+            document.getElementById("source").value + " to " +
+            document.getElementById("destination").value +
+            " on " + date + ".";
+
+        document.getElementById("flights").scrollIntoView({
+            behavior: "smooth"
+        });
+    }
+);
+
+// Calculate fare according to the selected class
+function getFare(flight, travelClass) {
+    if (!flight) return 0;
+
+    if (travelClass === "Business") {
+        return flight.business;
+    }
+
+    if (travelClass === "First") {
+        return flight.first;
+    }
+
+    return flight.economy;
+}
+
+// Select a flight
+function selectFlight(id) {
+    const flight = flights.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!flight) return;
+
+    document.getElementById("selectedFlight").value = String(id);
+
+    updateFare();
+
+    document.getElementById("booking").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// Update the fare display
+function updateFare() {
+    const flightId = Number(
+        document.getElementById("selectedFlight").value
+    );
+
+    const flight = flights.find(function(item) {
+        return item.id === flightId;
+    });
+
+    const travelClass = document.getElementById("travelClass").value;
+
+    const passengerCount = Number(
+        document.getElementById("passengers").value
+    ) || 0;
+
+    const fare = getFare(flight, travelClass);
+    const total = fare * passengerCount;
+
+    document.getElementById("flightName").textContent =
+        flight ? flight.name : "Not selected";
+
+    document.getElementById("farePerPassenger").textContent =
+        "₹" + fare;
+
+    document.getElementById("totalFare").textContent =
+        "₹" + total;
+}
+
+// Update fare whenever the selection changes
+document.getElementById("selectedFlight").addEventListener(
+    "change", updateFare
+);
+
+document.getElementById("travelClass").addEventListener(
+    "change", updateFare
+);
+
+document.getElementById("passengers").addEventListener(
+    "input", updateFare
+);
+
+// Confirm the flight booking
+document.getElementById("bookingForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const flightId = Number(
+            document.getElementById("selectedFlight").value
+        );
+
+        const flight = flights.find(function(item) {
+            return item.id === flightId;
+        });
+
+        const name = document.getElementById("passengerName")
+            .value.trim();
+
+        const age = Number(document.getElementById("age").value);
+
+        const gender = document.getElementById("gender").value;
+
+        const email = document.getElementById("email").value.trim();
+
+        const phone = document.getElementById("phone").value.trim();
+
+        const travelClass = document.getElementById("travelClass").value;
+
+        const passengerCount = Number(
+            document.getElementById("passengers").value
+        );
+
+        const travelDate = travelDateInput.value;
+
+        if (!flight) {
+            alert("Please select a flight.");
+            return;
+        }
+
+        if (!name || age < 1 || age > 120 || !gender ||
+            !/^[0-9]{10}$/.test(phone)) {
+            alert("Please enter valid passenger details.");
+            return;
+        }
+
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        if (!Number.isInteger(passengerCount) ||
+            passengerCount < 1 || passengerCount > 6) {
+            alert("Please select between 1 and 6 passengers.");
+            return;
+        }
+
+        if (!travelDate || travelDate < todayString) {
+            alert("Please select a valid travel date.");
+            return;
+        }
+
+        const fare = getFare(flight, travelClass);
+        const total = fare * passengerCount;
+
+        const bookingId =
+            "SB" + Date.now().toString().slice(-8);
+
+        const classNames = {
+            Economy: "Economy Class",
+            Business: "Business Class",
+            First: "First Class"
+        };
+
+        const result = document.getElementById("bookingResult");
+
+        result.innerHTML = `
+            <h3>✅ Flight Booking Confirmed!</h3>
+            <p><strong>Booking Reference:</strong> ${bookingId}</p>
+            <p><strong>Passenger Name:</strong> ${name}</p>
+            <p><strong>Age:</strong> ${age}</p>
+            <p><strong>Gender:</strong> ${gender}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Mobile:</strong> ${phone}</p>
+            <p><strong>Airline:</strong> ${flight.name}</p>
+            <p><strong>Flight Number:</strong> ${flight.number}</p>
+            <p><strong>Route:</strong> ${flight.source} → ${flight.destination}</p>
+            <p><strong>Travel Date:</strong> ${travelDate}</p>
+            <p><strong>Departure:</strong> ${flight.departure}</p>
+            <p><strong>Travel Class:</strong> ${classNames[travelClass]}</p>
+            <p><strong>Passengers:</strong> ${passengerCount}</p>
+            <p><strong>Fare Per Passenger:</strong> ₹${fare}</p>
+            <p><strong>Total Fare:</strong> ₹${total}</p>
+            <p>Please save your booking reference for future reference.</p>
+        `;
+
+        result.classList.remove("hidden");
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+// Initialize the page
+renderFlights();
+updateFare();
+
+6. RESULT
+Thus, the Online Flight Reservation System was developed successfully using HTML, CSS, and JavaScript. The system allows users to search for flights, view flight details, enter passenger information, select travel classes, calculate ticket fares, and display booking confirmation with a unique booking reference.
