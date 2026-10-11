@@ -1,0 +1,706 @@
+EXPERIMENT 1: LIBRARY MANAGEMENT SYSTEM
+1. AIM
+To design and develop a Library Management System using HTML, CSS, and JavaScript to manage books, student accounts, borrowing history, fines, and study materials.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage with a book catalog, student account, study materials, and admin panel.
+3. Design the webpage using HTML elements and CSS styling.
+4. Display available books with their titles, authors, and categories.
+5. Allow users to search for books by title or author.
+6. Provide student registration and login forms.
+7. Display borrowing history and calculate fines based on overdue days.
+8. Allow the administrator to add books to the library.
+9. Provide year-wise and semester-wise study material filtering.
+10. Display the results dynamically using JavaScript.
+3. HTML CODE
+Filename: experiment1_library.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="experiment1_library.css">
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>📚 Campus Library</h1>
+        <p>Books, borrowing and study materials in one place</p>
+    </div>
+    <button onclick="showTab('admin')">Admin Panel</button>
+</header>
+
+<nav>
+    <button onclick="showTab('books')">Book Catalog</button>
+    <button onclick="showTab('account')">Student Account</button>
+    <button onclick="showTab('materials')">Study Materials</button>
+    <button onclick="showTab('admin')">Manage Library</button>
+</nav>
+
+<main>
+
+    <!-- Book Catalog -->
+    <section id="books" class="panel">
+        <h2>Find a Book</h2>
+
+        <div class="controls">
+            <input type="text" id="bookSearch"
+                   placeholder="Search title or author..."
+                   oninput="renderBooks()">
+            <button onclick="renderBooks()">Search</button>
+        </div>
+
+        <div id="bookList" class="cards"></div>
+    </section>
+
+    <!-- Student Account -->
+    <section id="account" class="panel hidden">
+        <h2>Student Account</h2>
+
+        <div class="grid2">
+
+            <form id="registerForm" class="card">
+                <h3>Register / Login</h3>
+
+                <input type="text" id="studentName"
+                       placeholder="Student name" required>
+
+                <input type="email" id="studentEmail"
+                       placeholder="Email address" required>
+
+                <input type="password" id="studentPassword"
+                       placeholder="Password" required>
+
+                <button type="submit">Register / Login</button>
+
+                <p id="loginMessage" class="message"></p>
+            </form>
+
+            <div class="card">
+                <h3>My Borrow History</h3>
+                <p>Issue date and expected return date are shown below.</p>
+
+                <div id="borrowList"></div>
+
+                <h3>Fine Checker</h3>
+
+                <label>
+                    Days overdue
+                    <input type="number" id="lateDays"
+                           min="0" value="0">
+                </label>
+
+                <button onclick="calculateFine()">Calculate Fine</button>
+
+                <p id="fineOutput" class="message">Fine: ₹0</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Study Materials -->
+    <section id="materials" class="panel hidden">
+        <h2>Study Materials</h2>
+
+        <div class="controls">
+            <select id="yearFilter">
+                <option value="">All years</option>
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+            </select>
+
+            <select id="semesterFilter">
+                <option value="">All semesters</option>
+                <option>Semester 1</option>
+                <option>Semester 2</option>
+            </select>
+
+            <button onclick="renderMaterials()">Search Materials</button>
+        </div>
+
+        <div id="materialList" class="cards"></div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="admin" class="panel hidden">
+        <h2>Admin: Manage Books</h2>
+
+        <form id="bookForm" class="formrow">
+            <input type="text" id="newTitle"
+                   placeholder="Book title" required>
+
+            <input type="text" id="newAuthor"
+                   placeholder="Author" required>
+
+            <input type="text" id="newCategory"
+                   placeholder="Category" required>
+
+            <button type="submit">Add Book</button>
+        </form>
+
+        <div id="adminBookList"></div>
+    </section>
+
+</main>
+
+<footer>
+    Campus Library • Internet Programming Lab
+</footer>
+
+<script src="experiment1_library.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment1_library.css
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f5fa;
+    color: #263238;
+}
+
+header {
+    background: #17365d;
+    color: white;
+    padding: 25px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+header h1 {
+    margin: 0 0 8px;
+}
+
+header p {
+    margin: 0;
+    color: #dce8f7;
+}
+
+nav {
+    background: white;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+button {
+    background: #1769aa;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #104c7d;
+}
+
+main {
+    max-width: 1100px;
+    margin: 25px auto;
+    padding: 0 18px;
+}
+
+.panel {
+    background: white;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #0000000d;
+}
+
+.panel h2 {
+    color: #17365d;
+    margin-top: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+input, select {
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    max-width: 100%;
+}
+
+.controls input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: #f8fbff;
+    border: 1px solid #dce5ef;
+    padding: 18px;
+    border-radius: 9px;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #17365d;
+}
+
+.card p {
+    line-height: 1.6;
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+form input {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+form button {
+    margin-top: 5px;
+}
+
+.formrow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.formrow input {
+    margin: 0;
+}
+
+.message {
+    color: #176b42;
+    font-weight: bold;
+}
+
+.book-item {
+    background: white;
+    border: 1px solid #dce5ef;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.book-item h3 {
+    color: #17365d;
+    margin-top: 0;
+}
+
+.book-item button {
+    margin: 4px 4px 4px 0;
+}
+
+footer {
+    background: #17365d;
+    color: white;
+    text-align: center;
+    padding: 18px;
+    margin-top: 35px;
+}
+
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav button {
+        width: 100%;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment1_library.js
+// Initial book details
+let books = [
+    {
+        id: 1,
+        title: "Introduction to Python",
+        author: "John Smith",
+        category: "Programming"
+    },
+    {
+        id: 2,
+        title: "Web Development Basics",
+        author: "David Miller",
+        category: "Web Technology"
+    },
+    {
+        id: 3,
+        title: "Artificial Intelligence",
+        author: "Andrew Ng",
+        category: "Artificial Intelligence"
+    },
+    {
+        id: 4,
+        title: "Database Management",
+        author: "Raghu Ramakrishnan",
+        category: "Database"
+    }
+];
+
+// Sample study materials
+const materials = [
+    {
+        title: "Python Programming Notes",
+        year: "1st Year",
+        semester: "Semester 1"
+    },
+    {
+        title: "Web Technology Notes",
+        year: "2nd Year",
+        semester: "Semester 1"
+    },
+    {
+        title: "Machine Learning Notes",
+        year: "3rd Year",
+        semester: "Semester 2"
+    },
+    {
+        title: "Database Systems Notes",
+        year: "2nd Year",
+        semester: "Semester 2"
+    }
+];
+
+// Sample borrowing history
+const borrowHistory = [
+    {
+        title: "Introduction to Python",
+        issueDate: "2026-10-01",
+        returnDate: "2026-10-15"
+    },
+    {
+        title: "Web Development Basics",
+        issueDate: "2026-10-05",
+        returnDate: "2026-10-19"
+    }
+];
+
+// Switch between sections
+function showTab(tabId) {
+    document.querySelectorAll(".panel").forEach(function(panel) {
+        panel.classList.add("hidden");
+    });
+
+    document.getElementById(tabId).classList.remove("hidden");
+}
+
+// Display and search books
+function renderBooks() {
+    const search = document.getElementById("bookSearch")
+        .value.toLowerCase();
+
+    const filteredBooks = books.filter(function(book) {
+        return book.title.toLowerCase().includes(search) ||
+               book.author.toLowerCase().includes(search) ||
+               book.category.toLowerCase().includes(search);
+    });
+
+    const bookList = document.getElementById("bookList");
+
+    if (filteredBooks.length === 0) {
+        bookList.innerHTML = "<p>No books found.</p>";
+        return;
+    }
+
+    bookList.innerHTML = filteredBooks.map(function(book) {
+        return `
+            <div class="card">
+                <h3>${book.title}</h3>
+                <p><strong>Author:</strong> ${book.author}</p>
+                <p><strong>Category:</strong> ${book.category}</p>
+                <button onclick="viewBook(${book.id})">
+                    View Details
+                </button>
+            </div>
+        `;
+    }).join("");
+}
+
+// View book details
+function viewBook(id) {
+    const book = books.find(function(item) {
+        return item.id === id;
+    });
+
+    if (book) {
+        alert(
+            "Book Details\n" +
+            "Title: " + book.title + "\n" +
+            "Author: " + book.author + "\n" +
+            "Category: " + book.category
+        );
+    }
+}
+
+// Display books in admin panel
+function renderAdminBooks() {
+    const adminList = document.getElementById("adminBookList");
+
+    adminList.innerHTML = books.map(function(book) {
+        return `
+            <div class="book-item">
+                <h3>${book.title}</h3>
+                <p>Author: ${book.author}</p>
+                <p>Category: ${book.category}</p>
+
+                <button onclick="editBook(${book.id})">
+                    Update
+                </button>
+
+                <button onclick="deleteBook(${book.id})">
+                    Delete
+                </button>
+
+                <button onclick="issueBook(${book.id})">
+                    Issue Book
+                </button>
+            </div>
+        `;
+    }).join("");
+}
+
+// Add a new book
+document.getElementById("bookForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const title = document.getElementById("newTitle").value.trim();
+        const author = document.getElementById("newAuthor").value.trim();
+        const category = document.getElementById("newCategory").value.trim();
+
+        if (!title || !author || !category) {
+            alert("Please fill in all book details.");
+            return;
+        }
+
+        books.push({
+            id: Date.now(),
+            title: title,
+            author: author,
+            category: category
+        });
+
+        this.reset();
+
+        renderBooks();
+        renderAdminBooks();
+
+        alert("Book added successfully!");
+    }
+);
+
+// Update a book
+function editBook(id) {
+    const book = books.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!book) return;
+
+    const title = prompt("Enter new book title:", book.title);
+    if (title === null || title.trim() === "") return;
+
+    const author = prompt("Enter new author:", book.author);
+    if (author === null || author.trim() === "") return;
+
+    const category = prompt("Enter new category:", book.category);
+    if (category === null || category.trim() === "") return;
+
+    book.title = title.trim();
+    book.author = author.trim();
+    book.category = category.trim();
+
+    renderBooks();
+    renderAdminBooks();
+
+    alert("Book updated successfully!");
+}
+
+// Delete a book
+function deleteBook(id) {
+    if (!confirm("Are you sure you want to delete this book?")) {
+        return;
+    }
+
+    books = books.filter(function(book) {
+        return book.id !== id;
+    });
+
+    renderBooks();
+    renderAdminBooks();
+
+    alert("Book deleted successfully!");
+}
+
+// Issue a book
+function issueBook(id) {
+    const book = books.find(function(item) {
+        return item.id === id;
+    });
+
+    if (!book) return;
+
+    const today = new Date();
+    const returnDate = new Date();
+
+    returnDate.setDate(today.getDate() + 14);
+
+    borrowHistory.push({
+        title: book.title,
+        issueDate: today.toISOString().slice(0, 10),
+        returnDate: returnDate.toISOString().slice(0, 10)
+    });
+
+    renderBorrowHistory();
+
+    alert("Book issued successfully!");
+}
+
+// Display borrowing history
+function renderBorrowHistory() {
+    const borrowList = document.getElementById("borrowList");
+
+    borrowList.innerHTML = borrowHistory.map(function(item) {
+        return `
+            <div class="book-item">
+                <strong>${item.title}</strong>
+                <p>Issue Date: ${item.issueDate}</p>
+                <p>Expected Return: ${item.returnDate}</p>
+            </div>
+        `;
+    }).join("");
+}
+
+// Student registration form
+document.getElementById("registerForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("studentName").value.trim();
+        const email = document.getElementById("studentEmail").value.trim();
+
+        document.getElementById("loginMessage").textContent =
+            "Welcome, " + name + "! Registration successful.";
+
+        alert("Student registered successfully!\nEmail: " + email);
+    }
+);
+
+// Calculate overdue fine at ₹5 per day
+function calculateFine() {
+    const days = Number(document.getElementById("lateDays").value);
+
+    if (days < 0 || !Number.isFinite(days)) {
+        alert("Enter a valid number of overdue days.");
+        return;
+    }
+
+    const fine = days * 5;
+
+    document.getElementById("fineOutput").textContent =
+        "Total Fine: ₹" + fine;
+}
+
+// Filter study materials
+function renderMaterials() {
+    const year = document.getElementById("yearFilter").value;
+    const semester = document.getElementById("semesterFilter").value;
+
+    const filteredMaterials = materials.filter(function(material) {
+        return (!year || material.year === year) &&
+               (!semester || material.semester === semester);
+    });
+
+    const materialList = document.getElementById("materialList");
+
+    if (filteredMaterials.length === 0) {
+        materialList.innerHTML = "<p>No study materials found.</p>";
+        return;
+    }
+
+    materialList.innerHTML = filteredMaterials.map(function(material) {
+        return `
+            <div class="card">
+                <h3>${material.title}</h3>
+                <p>Year: ${material.year}</p>
+                <p>${material.semester}</p>
+                <button onclick="downloadMaterial('${material.title}')">
+                    Download
+                </button>
+            </div>
+        `;
+    }).join("");
+}
+
+// Download a sample study material file
+function downloadMaterial(title) {
+    const content = title + "\nCampus Library Study Material";
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = title.replace(/[^a-z0-9]/gi, "_") + ".txt";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    URL.revokeObjectURL(url);
+}
+
+// Initialize the page
+renderBooks();
+renderAdminBooks();
+renderBorrowHistory();
+renderMaterials();
+
+6. RESULT
+Thus, the Library Management System was designed and developed successfully using HTML, CSS, and JavaScript. The website supports book searching, viewing book details, adding, updating and deleting books, student registration, borrowing history, fine calculation, and year-wise and semester-wise study material filtering.
