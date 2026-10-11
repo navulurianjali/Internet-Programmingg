@@ -1,0 +1,866 @@
+EXPERIMENT 10: STYLEHUB FASHION SHOPPING SYSTEM
+1. AIM
+To design and develop an online fashion shopping website using HTML, CSS, and JavaScript that allows users to browse clothing products, search and filter items, add products to a shopping cart, manage quantities, calculate the total price, and place an order.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage to display fashion products.
+3. Design the webpage using HTML and CSS.
+4. Display clothing items with names, images, sizes, and prices.
+5. Provide search and category filtering options.
+6. Allow users to add products to the shopping cart.
+7. Allow users to increase, decrease, or remove cart items.
+8. Calculate the subtotal and delivery charges dynamically.
+9. Display the order summary after checkout.
+10. Stop the program.
+3. HTML CODE
+Filename: experiment10_fashion.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleHub - Fashion Store</title>
+    <link rel="stylesheet" href="experiment10_fashion.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">STYLEHUB<span>.</span></div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#products">Shop</a>
+        <a href="#cart">My Cart (<span id="cartCount">0</span>)</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <div class="hero-content">
+        <p class="tagline">NEW SEASON COLLECTION</p>
+        <h1>Dress Your Way.<br>Express Yourself.</h1>
+        <p>Discover stylish outfits for every occasion.</p>
+        <a href="#products" class="shop-button">Explore Collection</a>
+    </div>
+</section>
+
+<main>
+    <section class="products-section" id="products">
+        <h2>Discover Your Style</h2>
+        <p class="subtitle">Fashion that matches your personality.</p>
+
+        <div class="filters">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search clothing..."
+            >
+
+            <select id="categoryFilter">
+                <option value="All">All Categories</option>
+                <option value="Men">Men</option>
+                <option value="Women">Women</option>
+                <option value="Accessories">Accessories</option>
+            </select>
+
+            <select id="sortFilter">
+                <option value="default">Sort By</option>
+                <option value="low">Price: Low to High</option>
+                <option value="high">Price: High to Low</option>
+            </select>
+        </div>
+
+        <div class="product-grid" id="productGrid"></div>
+
+        <p id="noProducts" class="hidden">
+            No matching products found.
+        </p>
+    </section>
+
+    <section class="cart-section" id="cart">
+        <h2>🛍️ Your Shopping Bag</h2>
+
+        <div id="cartItems">
+            <p class="empty-cart">Your shopping bag is empty.</p>
+        </div>
+
+        <div class="cart-summary">
+            <p>Subtotal: <strong id="subtotal">₹0</strong></p>
+            <p>Delivery: <strong id="delivery">₹0</strong></p>
+            <h3>Total: <span id="total">₹0</span></h3>
+
+            <button type="button" id="checkoutButton">
+                Place Order
+            </button>
+        </div>
+    </section>
+
+    <section id="orderResult" class="order-result hidden"></section>
+</main>
+
+<footer>
+    <h3>STYLEHUB.</h3>
+    <p>Wear Confidence. Wear Style.</p>
+    <p>© 2026 StyleHub Fashion Store</p>
+</footer>
+
+<script src="experiment10_fashion.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment10_fashion.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #faf8f6;
+    color: #292524;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    background: white;
+    border-bottom: 1px solid #eee5df;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #c26b53;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    text-decoration: none;
+    color: #292524;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #c26b53;
+}
+
+.hero {
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+    padding: 55px 9%;
+    background: linear-gradient(110deg, #ead9ce, #f7eee8);
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.tagline {
+    color: #a14e38;
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.hero h1 {
+    font-size: 44px;
+    line-height: 1.2;
+    margin-bottom: 15px;
+}
+
+.hero-content > p:not(.tagline) {
+    color: #62534d;
+    margin-bottom: 25px;
+}
+
+.shop-button {
+    display: inline-block;
+    background: #292524;
+    color: white;
+    padding: 13px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.shop-button:hover {
+    background: #a14e38;
+}
+
+.products-section,
+.cart-section {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 0 25px;
+}
+
+h2 {
+    font-size: 29px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #78716c;
+    margin-bottom: 25px;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.filters input,
+.filters select {
+    padding: 13px;
+    border: 1px solid #ded6d0;
+    border-radius: 5px;
+    background: white;
+    font-size: 14px;
+}
+
+.filters input {
+    flex: 1;
+    min-width: 0;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #eee5df;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px #00000012;
+}
+
+.product-image {
+    height: 165px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1e7df;
+    font-size: 67px;
+}
+
+.product-details {
+    padding: 20px;
+}
+
+.product-details h3 {
+    margin-bottom: 5px;
+}
+
+.category {
+    color: #a14e38;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.description {
+    color: #78716c;
+    font-size: 14px;
+    margin: 10px 0;
+    min-height: 42px;
+}
+
+.size-label {
+    display: block;
+    margin: 12px 0 5px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.size-select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #ded6d0;
+    border-radius: 4px;
+    background: white;
+}
+
+.product-price {
+    font-size: 21px;
+    font-weight: bold;
+    margin: 12px 0;
+}
+
+.add-button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: #292524;
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background: #a14e38;
+}
+
+button {
+    cursor: pointer;
+}
+
+.cart-section {
+    padding: 30px;
+    background: white;
+    border: 1px solid #eee5df;
+    border-radius: 8px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee5df;
+}
+
+.cart-item h4 {
+    margin-bottom: 5px;
+}
+
+.cart-item p {
+    color: #78716c;
+    font-size: 14px;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-wrap: wrap;
+}
+
+.quantity-controls button {
+    padding: 7px 11px;
+    background: #f1e7df;
+    border: none;
+    border-radius: 4px;
+}
+
+.remove-button {
+    background: #fee2e2 !important;
+    color: #b91c1c;
+}
+
+.empty-cart {
+    padding: 20px 0;
+    color: #78716c;
+}
+
+.cart-summary {
+    max-width: 400px;
+    margin: 25px 0 0 auto;
+    padding: 22px;
+    background: #faf8f6;
+    border-radius: 6px;
+}
+
+.cart-summary p {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.cart-summary h3 {
+    display: flex;
+    justify-content: space-between;
+    margin: 18px 0;
+}
+
+#total {
+    color: #a14e38;
+}
+
+#checkoutButton {
+    width: 100%;
+    padding: 14px;
+    background: #a14e38;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+#checkoutButton:hover {
+    background: #7d3828;
+}
+
+.order-result {
+    max-width: 1150px;
+    margin: 25px auto;
+    padding: 25px;
+    background: #e8f7ed;
+    border: 1px solid #b8e6c5;
+    color: #17633e;
+    border-radius: 8px;
+}
+
+.order-result h3,
+.order-result h4 {
+    margin-bottom: 12px;
+}
+
+.order-result p {
+    margin: 6px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 30px;
+    text-align: center;
+    background: #292524;
+    color: white;
+}
+
+footer h3 {
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+}
+
+footer p {
+    margin: 5px;
+    color: #e7dcd5;
+}
+
+@media (max-width: 650px) {
+    header {
+        flex-direction: column;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    .filters {
+        flex-direction: column;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart-summary {
+        margin-left: 0;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment10_fashion.js
+// Fashion product details
+const products = [
+    {
+        id: 1,
+        name: "Classic T-Shirt",
+        category: "Men",
+        price: 699,
+        icon: "👕",
+        description: "A comfortable everyday cotton T-shirt.",
+        sizes: ["S", "M", "L", "XL"]
+    },
+    {
+        id: 2,
+        name: "Denim Jacket",
+        category: "Men",
+        price: 1799,
+        icon: "🧥",
+        description: "A stylish denim jacket for casual outings.",
+        sizes: ["S", "M", "L", "XL"]
+    },
+    {
+        id: 3,
+        name: "Floral Dress",
+        category: "Women",
+        price: 1499,
+        icon: "👗",
+        description: "An elegant floral dress for any occasion.",
+        sizes: ["S", "M", "L", "XL"]
+    },
+    {
+        id: 4,
+        name: "Casual Kurti",
+        category: "Women",
+        price: 999,
+        icon: "🥻",
+        description: "A comfortable kurti with a modern design.",
+        sizes: ["S", "M", "L", "XL"]
+    },
+    {
+        id: 5,
+        name: "Running Sneakers",
+        category: "Men",
+        price: 2199,
+        icon: "👟",
+        description: "Lightweight sneakers for everyday comfort.",
+        sizes: ["7", "8", "9", "10"]
+    },
+    {
+        id: 6,
+        name: "Handbag",
+        category: "Accessories",
+        price: 1299,
+        icon: "👜",
+        description: "A versatile handbag with a stylish finish.",
+        sizes: ["Standard"]
+    },
+    {
+        id: 7,
+        name: "Sunglasses",
+        category: "Accessories",
+        price: 799,
+        icon: "🕶️",
+        description: "Fashionable sunglasses for sunny days.",
+        sizes: ["Standard"]
+    },
+    {
+        id: 8,
+        name: "Wrist Watch",
+        category: "Accessories",
+        price: 1599,
+        icon: "⌚",
+        description: "A classic watch to complete your outfit.",
+        sizes: ["Standard"]
+    }
+];
+
+// Shopping cart
+let cart = [];
+
+// Format prices in Indian Rupees
+function formatPrice(amount) {
+    return "₹" + amount.toLocaleString("en-IN");
+}
+
+// Display products with search, category, and price sorting
+function displayProducts() {
+    const searchText =
+        document.getElementById("searchInput").value.toLowerCase();
+
+    const selectedCategory =
+        document.getElementById("categoryFilter").value;
+
+    const sortOption =
+        document.getElementById("sortFilter").value;
+
+    let filteredProducts = products.filter(function(product) {
+        const matchesSearch =
+            product.name.toLowerCase().includes(searchText) ||
+            product.category.toLowerCase().includes(searchText) ||
+            product.description.toLowerCase().includes(searchText);
+
+        const matchesCategory =
+            selectedCategory === "All" ||
+            product.category === selectedCategory;
+
+        return matchesSearch && matchesCategory;
+    });
+
+    if (sortOption === "low") {
+        filteredProducts.sort(function(a, b) {
+            return a.price - b.price;
+        });
+    } else if (sortOption === "high") {
+        filteredProducts.sort(function(a, b) {
+            return b.price - a.price;
+        });
+    }
+
+    const productGrid = document.getElementById("productGrid");
+
+    productGrid.innerHTML = filteredProducts.map(function(product) {
+        const sizeOptions = product.sizes.map(function(size) {
+            return `<option value="${size}">${size}</option>`;
+        }).join("");
+
+        return `
+            <article class="product-card">
+                <div class="product-image">${product.icon}</div>
+
+                <div class="product-details">
+                    <h3>${product.name}</h3>
+                    <p class="category">${product.category}</p>
+                    <p class="description">${product.description}</p>
+
+                    <label class="size-label" for="size-${product.id}">
+                        Select Size
+                    </label>
+
+                    <select class="size-select" id="size-${product.id}">
+                        ${sizeOptions}
+                    </select>
+
+                    <p class="product-price">${formatPrice(product.price)}</p>
+
+                    <button class="add-button"
+                        onclick="addToCart(${product.id})">
+                        Add to Bag
+                    </button>
+                </div>
+            </article>
+        `;
+    }).join("");
+
+    document.getElementById("noProducts").classList.toggle(
+        "hidden",
+        filteredProducts.length > 0
+    );
+}
+
+// Add a product and selected size to the cart
+function addToCart(productId) {
+    const product = products.find(function(item) {
+        return item.id === productId;
+    });
+
+    if (!product) {
+        return;
+    }
+
+    const size = document.getElementById("size-" + productId).value;
+
+    const existingItem = cart.find(function(item) {
+        return item.id === productId && item.size === size;
+    });
+
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({
+            ...product,
+            size: size,
+            quantity: 1
+        });
+    }
+
+    updateCart();
+
+    alert(product.name + " (Size " + size + ") added to your bag!");
+}
+
+// Increase or decrease item quantity
+function changeQuantity(productId, size, change) {
+    const item = cart.find(function(product) {
+        return product.id === productId && product.size === size;
+    });
+
+    if (!item) {
+        return;
+    }
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(function(product) {
+            return !(product.id === productId && product.size === size);
+        });
+    }
+
+    updateCart();
+}
+
+// Remove a product and size combination
+function removeFromCart(productId, size) {
+    cart = cart.filter(function(item) {
+        return !(item.id === productId && item.size === size);
+    });
+
+    updateCart();
+}
+
+// Update cart items, quantities, and totals
+function updateCart() {
+    const cartItems = document.getElementById("cartItems");
+
+    const itemCount = cart.reduce(function(total, item) {
+        return total + item.quantity;
+    }, 0);
+
+    document.getElementById("cartCount").textContent = itemCount;
+
+    if (cart.length === 0) {
+        cartItems.innerHTML =
+            '<p class="empty-cart">Your shopping bag is empty.</p>';
+    } else {
+        cartItems.innerHTML = cart.map(function(item) {
+            return `
+                <div class="cart-item">
+                    <div>
+                        <h4>${item.icon} ${item.name}</h4>
+                        <p>Size: ${item.size}</p>
+                        <p>Price: ${formatPrice(item.price)}</p>
+                        <p>Subtotal:
+                            ${formatPrice(item.price * item.quantity)}
+                        </p>
+                    </div>
+
+                    <div class="quantity-controls">
+                        <button type="button"
+                            onclick="changeQuantity(
+                                ${item.id}, '${item.size}', -1
+                            )">−</button>
+
+                        <strong>${item.quantity}</strong>
+
+                        <button type="button"
+                            onclick="changeQuantity(
+                                ${item.id}, '${item.size}', 1
+                            )">+</button>
+
+                        <button type="button" class="remove-button"
+                            onclick="removeFromCart(
+                                ${item.id}, '${item.size}'
+                            )">
+                            Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    const subtotal = cart.reduce(function(total, item) {
+        return total + item.price * item.quantity;
+    }, 0);
+
+    // Free delivery for orders of ₹2,000 or more
+    const delivery = subtotal === 0 || subtotal >= 2000 ? 0 : 100;
+
+    document.getElementById("subtotal").textContent =
+        formatPrice(subtotal);
+
+    document.getElementById("delivery").textContent =
+        delivery === 0 && subtotal > 0
+            ? "FREE"
+            : formatPrice(delivery);
+
+    document.getElementById("total").textContent =
+        formatPrice(subtotal + delivery);
+}
+
+// Place order and display the order summary
+document.getElementById("checkoutButton").addEventListener(
+    "click",
+    function() {
+        if (cart.length === 0) {
+            alert("Your shopping bag is empty. Add products first.");
+            return;
+        }
+
+        const subtotal = cart.reduce(function(total, item) {
+            return total + item.price * item.quantity;
+        }, 0);
+
+        const delivery = subtotal >= 2000 ? 0 : 100;
+        const total = subtotal + delivery;
+
+        const orderId = "SH" + Date.now().toString().slice(-8);
+
+        const orderDetails = cart.map(function(item) {
+            return `
+                <p>
+                    ${item.name} | Size: ${item.size} |
+                    Quantity: ${item.quantity} |
+                    ${formatPrice(item.price * item.quantity)}
+                </p>
+            `;
+        }).join("");
+
+        const orderResult = document.getElementById("orderResult");
+
+        orderResult.innerHTML = `
+            <h3>✅ Order Placed Successfully!</h3>
+            <p><strong>Order ID:</strong> ${orderId}</p>
+
+            <h4>Order Details</h4>
+            ${orderDetails}
+
+            <p><strong>Subtotal:</strong> ${formatPrice(subtotal)}</p>
+            <p><strong>Delivery:</strong>
+                ${delivery === 0 ? "FREE" : formatPrice(delivery)}
+            </p>
+
+            <h3>Total Amount: ${formatPrice(total)}</h3>
+            <p>Thank you for shopping with StyleHub!</p>
+        `;
+
+        orderResult.classList.remove("hidden");
+
+        // Clear the cart after checkout
+        cart = [];
+        updateCart();
+
+        orderResult.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+// Search and filter event listeners
+document.getElementById("searchInput").addEventListener(
+    "input",
+    displayProducts
+);
+
+document.getElementById("categoryFilter").addEventListener(
+    "change",
+    displayProducts
+);
+
+document.getElementById("sortFilter").addEventListener(
+    "change",
+    displayProducts
+);
+
+// Initialize the website
+displayProducts();
+updateCart();
+
+6. RESULT
+Thus, the StyleHub Fashion Shopping System was developed successfully using HTML, CSS, and JavaScript. The website allows users to browse clothing products, search and filter items, sort products by price, select sizes, add items to the cart, modify quantities, remove products, calculate delivery charges, and display an order confirmation with a unique order ID.
