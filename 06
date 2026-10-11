@@ -1,0 +1,633 @@
+EXPERIMENT 6: CAKE ORDERING SYSTEM
+1. AIM
+To design and develop an Online Cake Ordering System using HTML, CSS, and JavaScript that allows users to view cakes, select cake types, customize orders, calculate prices, enter delivery details, and confirm orders.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage for the online cake ordering system.
+3. Design the webpage using HTML and CSS.
+4. Display different cakes with images, descriptions, and prices.
+5. Allow users to select a cake, quantity, and cake size.
+6. Calculate the total price based on the selected cake, size, and quantity.
+7. Accept customer details and delivery information.
+8. Validate the entered customer details.
+9. Generate an order ID and display the order summary.
+10. Stop the program.
+3. HTML CODE
+Filename: experiment6_cake.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Treats - Cake Ordering</title>
+    <link rel="stylesheet" href="experiment6_cake.css">
+</head>
+<body>
+
+<header>
+    <h1>🎂 Sweet Treats</h1>
+    <p>Making Every Celebration Sweeter!</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#cakes">Our Cakes</a>
+    <a href="#order">Order Now</a>
+</nav>
+
+<section class="hero" id="home">
+    <h2>A Little Cake, A Lot of Happiness!</h2>
+    <p>Choose your favourite cake and make your celebrations special.</p>
+    <a href="#cakes" class="hero-button">Explore Cakes</a>
+</section>
+
+<main>
+
+    <section id="cakes" class="section">
+        <h2>Our Delicious Cakes</h2>
+        <p class="subtitle">Freshly prepared for your special moments.</p>
+
+        <div class="cake-container">
+
+            <div class="cake-card">
+                <div class="cake-image chocolate">🍫</div>
+                <h3>Chocolate Cake</h3>
+                <p>Rich chocolate cake with creamy frosting.</p>
+                <p class="price">₹500</p>
+                <button type="button" onclick="selectCake('Chocolate Cake')">
+                    Order Now
+                </button>
+            </div>
+
+            <div class="cake-card">
+                <div class="cake-image vanilla">🍰</div>
+                <h3>Vanilla Cake</h3>
+                <p>Soft vanilla sponge with delicious cream.</p>
+                <p class="price">₹400</p>
+                <button type="button" onclick="selectCake('Vanilla Cake')">
+                    Order Now
+                </button>
+            </div>
+
+            <div class="cake-card">
+                <div class="cake-image strawberry">🍓</div>
+                <h3>Strawberry Cake</h3>
+                <p>Sweet strawberry flavour with fresh cream.</p>
+                <p class="price">₹600</p>
+                <button type="button" onclick="selectCake('Strawberry Cake')">
+                    Order Now
+                </button>
+            </div>
+
+            <div class="cake-card">
+                <div class="cake-image redvelvet">❤️</div>
+                <h3>Red Velvet Cake</h3>
+                <p>Classic red velvet with smooth cream cheese frosting.</p>
+                <p class="price">₹700</p>
+                <button type="button" onclick="selectCake('Red Velvet Cake')">
+                    Order Now
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="order" class="section order-section">
+        <h2>Place Your Cake Order</h2>
+
+        <form id="orderForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="cakeType">Select Cake</label>
+                    <select id="cakeType" required>
+                        <option value="">Choose a cake</option>
+                        <option value="Chocolate Cake">Chocolate Cake</option>
+                        <option value="Vanilla Cake">Vanilla Cake</option>
+                        <option value="Strawberry Cake">Strawberry Cake</option>
+                        <option value="Red Velvet Cake">Red Velvet Cake</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="cakeSize">Cake Size</label>
+                    <select id="cakeSize" required>
+                        <option value="1">0.5 kg</option>
+                        <option value="2">1 kg</option>
+                        <option value="3">1.5 kg</option>
+                        <option value="4">2 kg</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="quantity">Number of Cakes</label>
+                    <input type="number" id="quantity"
+                           min="1" max="10" value="1" required>
+                </div>
+
+                <div>
+                    <label for="message">Cake Message</label>
+                    <input type="text" id="message"
+                           maxlength="50"
+                           placeholder="e.g. Happy Birthday!">
+                </div>
+
+                <div>
+                    <label for="customerName">Customer Name</label>
+                    <input type="text" id="customerName"
+                           placeholder="Enter your name" required>
+                </div>
+
+                <div>
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="phone"
+                           pattern="[0-9]{10}"
+                           placeholder="10-digit mobile number" required>
+                </div>
+
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email"
+                           placeholder="Enter your email" required>
+                </div>
+
+                <div>
+                    <label for="deliveryDate">Delivery Date</label>
+                    <input type="date" id="deliveryDate" required>
+                </div>
+
+            </div>
+
+            <div class="full-width">
+                <label for="address">Delivery Address</label>
+                <textarea id="address" rows="3"
+                          placeholder="Enter your complete address"
+                          required></textarea>
+            </div>
+
+            <div class="price-box">
+                <p>Selected Cake: <strong id="selectedCake">Not selected</strong></p>
+                <p>Size: <strong id="selectedSize">0.5 kg</strong></p>
+                <h3>Total Amount: <span id="totalPrice">₹0</span></h3>
+            </div>
+
+            <button type="submit" class="confirm-button">
+                Place Order
+            </button>
+
+        </form>
+
+        <div id="orderResult" class="order-result hidden"></div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 Sweet Treats | Made with ❤️ for Cake Lovers</p>
+</footer>
+
+<script src="experiment6_cake.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment6_cake.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fff8f6;
+    color: #49353b;
+    line-height: 1.6;
+}
+
+header {
+    background: #8e3b58;
+    color: white;
+    padding: 22px 7%;
+}
+
+header h1 {
+    font-size: 30px;
+}
+
+header p {
+    color: #ffe3ed;
+}
+
+nav {
+    background: white;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 15px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+nav a {
+    text-decoration: none;
+    color: #8e3b58;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #d65a78;
+}
+
+.hero {
+    background: linear-gradient(120deg, #8e3b58, #d77891);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    margin-bottom: 25px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: #fff0c9;
+    color: #8e3b58;
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 22px;
+}
+
+.section h2 {
+    color: #8e3b58;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    color: #8c777d;
+    margin-bottom: 22px;
+}
+
+.cake-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.cake-card {
+    background: white;
+    padding: 18px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px #0000000c;
+    border: 1px solid #f3dce3;
+    transition: transform 0.2s;
+}
+
+.cake-card:hover {
+    transform: translateY(-5px);
+}
+
+.cake-image {
+    height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 65px;
+    margin-bottom: 15px;
+}
+
+.chocolate {
+    background: #f1d7c6;
+}
+
+.vanilla {
+    background: #fff0d2;
+}
+
+.strawberry {
+    background: #ffe0e8;
+}
+
+.redvelvet {
+    background: #f6d7dc;
+}
+
+.cake-card h3 {
+    color: #8e3b58;
+    margin-bottom: 8px;
+}
+
+.cake-card p {
+    margin-bottom: 8px;
+}
+
+.price {
+    color: #238052;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+button {
+    background: #a44365;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #7f2d4a;
+}
+
+.cake-card button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.order-section {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+label {
+    display: block;
+    color: #8e3b58;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2cbd3;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background: white;
+}
+
+.full-width {
+    margin-top: 18px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.price-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: #fff0f4;
+    border-radius: 8px;
+}
+
+.price-box p {
+    margin-bottom: 8px;
+}
+
+.price-box h3 {
+    margin-top: 12px;
+    color: #238052;
+}
+
+.confirm-button {
+    width: 100%;
+    margin-top: 20px;
+    background: #238052;
+}
+
+.confirm-button:hover {
+    background: #17633e;
+}
+
+.order-result {
+    margin-top: 25px;
+    padding: 22px;
+    background: #e9f8ee;
+    color: #185c3a;
+    border: 1px solid #b7dfc3;
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+
+.order-result h3 {
+    margin-bottom: 12px;
+}
+
+.order-result p {
+    margin: 7px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 45px;
+    padding: 20px;
+    background: #8e3b58;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 650px) {
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-section {
+        padding: 18px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment6_cake.js
+// Cake details and base prices per kilogram
+const cakes = {
+    "Chocolate Cake": 500,
+    "Vanilla Cake": 400,
+    "Strawberry Cake": 600,
+    "Red Velvet Cake": 700
+};
+
+// Set the minimum delivery date to today
+const deliveryDateInput = document.getElementById("deliveryDate");
+
+const now = new Date();
+
+const todayString = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+].join("-");
+
+deliveryDateInput.min = todayString;
+deliveryDateInput.value = todayString;
+
+// Select a cake from the cake cards
+function selectCake(cakeName) {
+    document.getElementById("cakeType").value = cakeName;
+
+    updatePrice();
+
+    document.getElementById("order").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// Calculate cake price based on size and quantity
+function updatePrice() {
+    const cakeName = document.getElementById("cakeType").value;
+
+    const size = Number(document.getElementById("cakeSize").value);
+
+    const quantity = Number(document.getElementById("quantity").value) || 0;
+
+    const basePrice = cakes[cakeName] || 0;
+
+    const total = basePrice * size * quantity;
+
+    document.getElementById("selectedCake").textContent =
+        cakeName || "Not selected";
+
+    document.getElementById("selectedSize").textContent =
+        (size * 0.5) + " kg";
+
+    document.getElementById("totalPrice").textContent =
+        "₹" + total;
+}
+
+// Update price whenever order options change
+document.getElementById("cakeType").addEventListener(
+    "change", updatePrice
+);
+
+document.getElementById("cakeSize").addEventListener(
+    "change", updatePrice
+);
+
+document.getElementById("quantity").addEventListener(
+    "input", updatePrice
+);
+
+// Process cake order
+document.getElementById("orderForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const cakeName = document.getElementById("cakeType").value;
+
+        const size = Number(document.getElementById("cakeSize").value);
+
+        const quantity = Number(document.getElementById("quantity").value);
+
+        const message = document.getElementById("message").value.trim();
+
+        const customerName = document.getElementById("customerName")
+            .value.trim();
+
+        const phone = document.getElementById("phone").value.trim();
+
+        const email = document.getElementById("email").value.trim();
+
+        const deliveryDate = deliveryDateInput.value;
+
+        const address = document.getElementById("address").value.trim();
+
+        if (!cakes[cakeName]) {
+            alert("Please select a cake.");
+            return;
+        }
+
+        if (!Number.isInteger(quantity) || quantity < 1 || quantity > 10) {
+            alert("Please select between 1 and 10 cakes.");
+            return;
+        }
+
+        if (!customerName || !/^[0-9]{10}$/.test(phone) ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !address) {
+            alert("Please enter valid customer and delivery details.");
+            return;
+        }
+
+        if (!deliveryDate || deliveryDate < todayString) {
+            alert("Please select a valid delivery date.");
+            return;
+        }
+
+        const total = cakes[cakeName] * size * quantity;
+
+        const orderId = "CAKE" + Date.now().toString().slice(-8);
+
+        const result = document.getElementById("orderResult");
+
+        result.innerHTML = `
+            <h3>🎉 Your Cake Order Is Confirmed!</h3>
+            <p><strong>Order ID:</strong> ${orderId}</p>
+            <p><strong>Customer Name:</strong> ${customerName}</p>
+            <p><strong>Mobile Number:</strong> ${phone}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Cake:</strong> ${cakeName}</p>
+            <p><strong>Cake Size:</strong> ${size * 0.5} kg</p>
+            <p><strong>Quantity:</strong> ${quantity}</p>
+            <p><strong>Message on Cake:</strong> ${message || "No message"}</p>
+            <p><strong>Delivery Date:</strong> ${deliveryDate}</p>
+            <p><strong>Delivery Address:</strong> ${address}</p>
+            <p><strong>Total Amount:</strong> ₹${total}</p>
+            <p>Thank you for choosing Sweet Treats!</p>
+        `;
+
+        result.classList.remove("hidden");
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+// Initialize the price display
+updatePrice();
+
+6. RESULT
+Thus, the Online Cake Ordering System was developed successfully using HTML, CSS, and JavaScript. The system allows users to view cakes, select cake sizes and quantities, customize cake messages, enter customer and delivery details, calculate the total price, and generate an order confirmation with a unique order ID.
