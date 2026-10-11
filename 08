@@ -1,0 +1,613 @@
+EXPERIMENT 8: HOSPITAL APPOINTMENT BOOKING SYSTEM
+1. AIM
+To design and develop a Hospital Appointment Booking System using HTML, CSS, and JavaScript that allows patients to view doctors, select departments, book appointments, choose appointment dates and times, and receive booking confirmation.
+2. ALGORITHM
+1. Start the program.
+2. Create a webpage for the hospital appointment booking system.
+3. Design the webpage using HTML and CSS.
+4. Display available doctors with their specializations and consultation fees.
+5. Allow patients to select a doctor and enter their details.
+6. Provide options to choose an appointment date and time.
+7. Validate patient information and appointment details.
+8. Calculate the consultation fee based on the selected doctor.
+9. Generate an appointment ID and display the booking details.
+10. Stop the program.
+3. HTML CODE
+Filename: experiment8_hospital.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarePlus Hospital</title>
+    <link rel="stylesheet" href="experiment8_hospital.css">
+</head>
+<body>
+
+<header>
+    <h1>🏥 CarePlus Hospital</h1>
+    <p>Your Health, Our Priority</p>
+</header>
+
+<nav>
+    <a href="#home">Home</a>
+    <a href="#doctors">Our Doctors</a>
+    <a href="#appointment">Book Appointment</a>
+</nav>
+
+<section class="hero" id="home">
+    <h2>Quality Healthcare for Everyone</h2>
+    <p>Consult experienced doctors and take the first step towards better health.</p>
+    <a href="#doctors" class="hero-button">Meet Our Doctors</a>
+</section>
+
+<main>
+
+    <section id="doctors" class="section">
+        <h2>Our Specialists</h2>
+        <p class="subtitle">Choose a doctor for your consultation.</p>
+
+        <div class="doctor-container">
+
+            <div class="doctor-card">
+                <div class="doctor-icon">👨‍⚕️</div>
+                <h3>Dr. Arun Kumar</h3>
+                <p>Cardiologist</p>
+                <p>Heart and cardiovascular care</p>
+                <p class="price">₹600</p>
+                <button type="button"
+                    onclick="selectDoctor('1')">Book Appointment</button>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-icon">👩‍⚕️</div>
+                <h3>Dr. Priya Sharma</h3>
+                <p>Dermatologist</p>
+                <p>Skin and hair care</p>
+                <p class="price">₹500</p>
+                <button type="button"
+                    onclick="selectDoctor('2')">Book Appointment</button>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-icon">👨‍⚕️</div>
+                <h3>Dr. Rahul Reddy</h3>
+                <p>General Physician</p>
+                <p>General health consultations</p>
+                <p class="price">₹400</p>
+                <button type="button"
+                    onclick="selectDoctor('3')">Book Appointment</button>
+            </div>
+
+            <div class="doctor-card">
+                <div class="doctor-icon">👩‍⚕️</div>
+                <h3>Dr. Sneha Rao</h3>
+                <p>Pediatrician</p>
+                <p>Healthcare for children</p>
+                <p class="price">₹450</p>
+                <button type="button"
+                    onclick="selectDoctor('4')">Book Appointment</button>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="appointment" class="section appointment-section">
+        <h2>Book Your Appointment</h2>
+
+        <form id="appointmentForm">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="patientName">Patient Name</label>
+                    <input type="text" id="patientName"
+                           placeholder="Enter patient name" required>
+                </div>
+
+                <div>
+                    <label for="age">Patient Age</label>
+                    <input type="number" id="age"
+                           min="1" max="120" required>
+                </div>
+
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" required>
+                        <option value="">Select gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="phone"
+                           pattern="[0-9]{10}"
+                           placeholder="10-digit mobile number" required>
+                </div>
+
+                <div>
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email"
+                           placeholder="Enter email address" required>
+                </div>
+
+                <div>
+                    <label for="doctor">Select Doctor</label>
+                    <select id="doctor" required>
+                        <option value="">Choose a doctor</option>
+                        <option value="1">Dr. Arun Kumar - Cardiologist</option>
+                        <option value="2">Dr. Priya Sharma - Dermatologist</option>
+                        <option value="3">Dr. Rahul Reddy - General Physician</option>
+                        <option value="4">Dr. Sneha Rao - Pediatrician</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="appointmentDate">Appointment Date</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+
+                <div>
+                    <label for="appointmentTime">Appointment Time</label>
+                    <select id="appointmentTime" required>
+                        <option value="">Select time slot</option>
+                        <option value="09:00 AM">09:00 AM</option>
+                        <option value="10:00 AM">10:00 AM</option>
+                        <option value="11:00 AM">11:00 AM</option>
+                        <option value="12:00 PM">12:00 PM</option>
+                        <option value="02:00 PM">02:00 PM</option>
+                        <option value="03:00 PM">03:00 PM</option>
+                        <option value="04:00 PM">04:00 PM</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="fee-box">
+                <p>Selected Doctor:
+                    <strong id="selectedDoctor">Not selected</strong>
+                </p>
+                <h3>Consultation Fee:
+                    <span id="consultationFee">₹0</span>
+                </h3>
+            </div>
+
+            <button type="submit" class="confirm-button">
+                Confirm Appointment
+            </button>
+
+        </form>
+
+        <div id="appointmentResult" class="appointment-result hidden"></div>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 CarePlus Hospital | Caring for a Healthier Tomorrow</p>
+</footer>
+
+<script src="experiment8_hospital.js"></script>
+
+</body>
+</html>
+
+4. CSS CODE
+Filename: experiment8_hospital.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f3f9fc;
+    color: #293d49;
+    line-height: 1.6;
+}
+
+header {
+    background: #12616b;
+    color: white;
+    padding: 22px 7%;
+}
+
+header h1 {
+    font-size: 30px;
+}
+
+header p {
+    color: #d8f1f1;
+}
+
+nav {
+    background: white;
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 15px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+nav a {
+    text-decoration: none;
+    color: #12616b;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #24a5a0;
+}
+
+.hero {
+    background: linear-gradient(120deg, #12616b, #36a5a0);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    margin-bottom: 25px;
+}
+
+.hero-button {
+    display: inline-block;
+    background: white;
+    color: #12616b;
+    padding: 12px 25px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.section {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 22px;
+}
+
+.section h2 {
+    color: #12616b;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    color: #71838b;
+    margin-bottom: 22px;
+}
+
+.doctor-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.doctor-card {
+    background: white;
+    padding: 22px;
+    text-align: center;
+    border-radius: 12px;
+    border: 1px solid #dcebed;
+    box-shadow: 0 4px 15px #0000000b;
+    transition: transform 0.2s;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+}
+
+.doctor-icon {
+    font-size: 55px;
+    background: #e4f6f5;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.doctor-card h3 {
+    color: #12616b;
+    margin-bottom: 8px;
+}
+
+.doctor-card p {
+    margin-bottom: 8px;
+}
+
+.price {
+    color: #218453;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+button {
+    background: #16818a;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #105b63;
+}
+
+.doctor-card button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.appointment-section {
+    background: white;
+    padding: 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px #0000000b;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+label {
+    display: block;
+    color: #12616b;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cadfe3;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+}
+
+.fee-box {
+    margin-top: 25px;
+    padding: 20px;
+    background: #eaf8f7;
+    border-radius: 8px;
+}
+
+.fee-box p {
+    margin-bottom: 8px;
+}
+
+.fee-box h3 {
+    color: #218453;
+    margin-top: 12px;
+}
+
+.confirm-button {
+    width: 100%;
+    margin-top: 20px;
+    background: #218453;
+}
+
+.confirm-button:hover {
+    background: #17633e;
+}
+
+.appointment-result {
+    margin-top: 25px;
+    padding: 22px;
+    background: #e9f8ee;
+    color: #185c3a;
+    border: 1px solid #b7dfc3;
+    border-radius: 8px;
+    overflow-wrap: anywhere;
+}
+
+.appointment-result h3 {
+    margin-bottom: 12px;
+}
+
+.appointment-result p {
+    margin: 7px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    margin-top: 45px;
+    padding: 20px;
+    background: #12616b;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 650px) {
+    nav {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .hero h2 {
+        font-size: 27px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .appointment-section {
+        padding: 18px;
+    }
+}
+
+5. JAVASCRIPT CODE
+Filename: experiment8_hospital.js
+// Doctor details and consultation fees
+const doctors = {
+    "1": {
+        name: "Dr. Arun Kumar",
+        specialization: "Cardiologist",
+        fee: 600
+    },
+    "2": {
+        name: "Dr. Priya Sharma",
+        specialization: "Dermatologist",
+        fee: 500
+    },
+    "3": {
+        name: "Dr. Rahul Reddy",
+        specialization: "General Physician",
+        fee: 400
+    },
+    "4": {
+        name: "Dr. Sneha Rao",
+        specialization: "Pediatrician",
+        fee: 450
+    }
+};
+
+// Set the minimum appointment date to today
+const dateInput = document.getElementById("appointmentDate");
+
+const now = new Date();
+
+const todayString = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+].join("-");
+
+dateInput.min = todayString;
+dateInput.value = todayString;
+
+// Select a doctor from the doctor cards
+function selectDoctor(doctorId) {
+    document.getElementById("doctor").value = doctorId;
+
+    updateFee();
+
+    document.getElementById("appointment").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// Update doctor name and consultation fee
+function updateFee() {
+    const doctorId = document.getElementById("doctor").value;
+    const doctor = doctors[doctorId];
+
+    document.getElementById("selectedDoctor").textContent =
+        doctor ? doctor.name : "Not selected";
+
+    document.getElementById("consultationFee").textContent =
+        "₹" + (doctor ? doctor.fee : 0);
+}
+
+// Update fee when the doctor changes
+document.getElementById("doctor").addEventListener(
+    "change", updateFee
+);
+
+// Process appointment booking
+document.getElementById("appointmentForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("patientName")
+            .value.trim();
+
+        const age = Number(document.getElementById("age").value);
+
+        const gender = document.getElementById("gender").value;
+
+        const phone = document.getElementById("phone").value.trim();
+
+        const email = document.getElementById("email").value.trim();
+
+        const doctorId = document.getElementById("doctor").value;
+
+        const appointmentDate = dateInput.value;
+
+        const appointmentTime =
+            document.getElementById("appointmentTime").value;
+
+        const doctor = doctors[doctorId];
+
+        if (!name || age < 1 || age > 120 ||
+            !Number.isInteger(age) || !gender ||
+            !/^[0-9]{10}$/.test(phone)) {
+            alert("Please enter valid patient details.");
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        if (!doctor) {
+            alert("Please select a doctor.");
+            return;
+        }
+
+        if (!appointmentDate || appointmentDate < todayString) {
+            alert("Please select a valid appointment date.");
+            return;
+        }
+
+        if (!appointmentTime) {
+            alert("Please select an appointment time.");
+            return;
+        }
+
+        const appointmentId =
+            "CPH" + Date.now().toString().slice(-8);
+
+        const result = document.getElementById("appointmentResult");
+
+        result.innerHTML = `
+            <h3>✅ Appointment Booked Successfully!</h3>
+            <p><strong>Appointment ID:</strong> ${appointmentId}</p>
+            <p><strong>Patient Name:</strong> ${name}</p>
+            <p><strong>Age:</strong> ${age}</p>
+            <p><strong>Gender:</strong> ${gender}</p>
+            <p><strong>Mobile Number:</strong> ${phone}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Doctor:</strong> ${doctor.name}</p>
+            <p><strong>Specialization:</strong> ${doctor.specialization}</p>
+            <p><strong>Appointment Date:</strong> ${appointmentDate}</p>
+            <p><strong>Appointment Time:</strong> ${appointmentTime}</p>
+            <p><strong>Consultation Fee:</strong> ₹${doctor.fee}</p>
+            <p>Please save your appointment ID for reference.</p>
+        `;
+
+        result.classList.remove("hidden");
+
+        result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+
+// Initialize the consultation fee display
+updateFee();
+
+6. RESULT
+Thus, the Hospital Appointment Booking System was developed successfully using HTML, CSS, and JavaScript. The system allows patients to view doctors and their specializations, select a doctor, enter patient details, choose an appointment date and time, view consultation fees, and receive an appointment confirmation with a unique appointment ID.
