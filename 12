@@ -1,0 +1,207 @@
+QUESTION 12: INSUREEASY – ONLINE INSURANCE MANAGEMENT WEBSITE
+AIM
+To develop an online insurance management website using HTML, CSS, and JavaScript that allows users to view insurance policies, calculate premiums, and manage their insurance details.
+ALGORITHM
+1. Start the program.
+2. Create an HTML page containing insurance policy options and a premium calculator.
+3. Apply CSS to style the page and policy cards.
+4. Use JavaScript to display available insurance policies.
+5. Allow users to select a policy and enter the required amount.
+6. Calculate the estimated premium based on the selected policy.
+7. Display the premium and confirmation message.
+8. Stop the program.
+HTML CODE — index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureEasy</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>InsureEasy</h1>
+        <p>Your Protection, Our Priority</p>
+    </header>
+
+    <main>
+        <h2>Available Insurance Policies</h2>
+
+        <div class="policies">
+            <div class="card">
+                <h3>Health Insurance</h3>
+                <p>Annual premium rate: 2%</p>
+            </div>
+
+            <div class="card">
+                <h3>Vehicle Insurance</h3>
+                <p>Annual premium rate: 3%</p>
+            </div>
+
+            <div class="card">
+                <h3>Home Insurance</h3>
+                <p>Annual premium rate: 1%</p>
+            </div>
+        </div>
+
+        <section class="calculator">
+            <h2>Premium Calculator</h2>
+
+            <label for="policy">Select Policy:</label>
+            <select id="policy">
+                <option value="health">Health Insurance</option>
+                <option value="vehicle">Vehicle Insurance</option>
+                <option value="home">Home Insurance</option>
+            </select>
+
+            <label for="amount">Insured Amount (₹):</label>
+            <input type="number" id="amount"
+                   placeholder="Enter insured amount" min="1">
+
+            <button onclick="calculatePremium()">
+                Calculate Premium
+            </button>
+
+            <p id="result"></p>
+
+            <button onclick="applyPolicy()">Apply for Policy</button>
+            <p id="status"></p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 InsureEasy</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+CSS CODE — style.css
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f0f5f5;
+    color: #263238;
+}
+
+header {
+    background: #087f8c;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+main {
+    width: 90%;
+    max-width: 900px;
+    margin: 25px auto;
+}
+
+.policies {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.card, .calculator {
+    background: white;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+.card h3 {
+    color: #087f8c;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+}
+
+input, select {
+    width: 95%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #bbb;
+    border-radius: 5px;
+}
+
+button {
+    padding: 11px 16px;
+    margin-top: 15px;
+    background: #087f8c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #055963;
+}
+
+#result, #status {
+    font-weight: bold;
+    color: #087f8c;
+}
+
+footer {
+    background: #087f8c;
+    color: white;
+    text-align: center;
+    padding: 12px;
+}
+
+JAVASCRIPT CODE — script.js
+let calculatedPremium = 0;
+
+function calculatePremium() {
+    const policy = document.getElementById("policy").value;
+    const amount = Number(document.getElementById("amount").value);
+
+    const rates = {
+        health: 0.02,
+        vehicle: 0.03,
+        home: 0.01
+    };
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        document.getElementById("result").textContent =
+            "Please enter a valid insured amount.";
+        calculatedPremium = 0;
+        return;
+    }
+
+    calculatedPremium = amount * rates[policy];
+
+    document.getElementById("result").textContent =
+        "Estimated Annual Premium: ₹" +
+        calculatedPremium.toLocaleString("en-IN");
+}
+
+function applyPolicy() {
+    const amount = Number(document.getElementById("amount").value);
+    const policy = document.getElementById("policy");
+    const status = document.getElementById("status");
+
+    if (amount <= 0 || !Number.isFinite(amount) ||
+        calculatedPremium <= 0) {
+        status.textContent =
+            "Please calculate a valid premium first.";
+        return;
+    }
+
+    status.textContent =
+        "Application details prepared for " +
+        policy.options[policy.selectedIndex].text +
+        ". Estimated premium: ₹" +
+        calculatedPremium.toLocaleString("en-IN") +
+        ".";
+}
+
+RESULT
+Thus, the InsureEasy website was developed successfully. It displays different insurance policies, calculates estimated annual premiums, and provides an application confirmation message.
