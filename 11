@@ -1,0 +1,220 @@
+AIM
+To design and develop an interactive real estate website using HTML, CSS, and JavaScript that allows users to search for houses and lands based on location, property type, and budget.
+ALGORITHM
+1. Start the program.
+2. Create an HTML page containing a property search form and property listings.
+3. Apply CSS to design an attractive and responsive user interface.
+4. Use JavaScript to filter properties based on location, property type, and maximum budget.
+5. Display the matching properties and their details.
+6. Display a message when no matching properties are found.
+7. Stop the program.
+HTML CODE — index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Home Finder</h1>
+        <p>Find your perfect home within your budget</p>
+    </header>
+
+    <main>
+        <section class="search">
+            <h2>Search Properties</h2>
+            <input type="text" id="location" placeholder="Enter location">
+
+            <select id="type">
+                <option value="all">All Properties</option>
+                <option value="House">House</option>
+                <option value="Land">Land</option>
+                <option value="Apartment">Apartment</option>
+            </select>
+
+            <input type="number" id="budget"
+                   placeholder="Maximum budget (₹)">
+
+            <button onclick="searchProperties()">Search</button>
+        </section>
+
+        <h2>Available Properties</h2>
+        <div id="properties" class="property-list"></div>
+        <p id="message"></p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Home Finder</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+CSS CODE — style.css
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f5f9;
+    color: #263238;
+}
+
+header {
+    background: #174a7e;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+main {
+    width: 90%;
+    max-width: 1000px;
+    margin: 25px auto;
+}
+
+.search {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+input, select, button {
+    padding: 12px;
+    margin: 6px 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    background: #174a7e;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0d3156;
+}
+
+.property-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #ccc;
+}
+
+.card h3 {
+    color: #174a7e;
+}
+
+.card button {
+    width: 100%;
+}
+
+#message {
+    color: #b3261e;
+    font-weight: bold;
+}
+
+footer {
+    background: #174a7e;
+    color: white;
+    text-align: center;
+    padding: 12px;
+}
+
+JAVASCRIPT CODE — script.js
+const properties = [
+    {
+        name: "Family House",
+        location: "Chennai",
+        type: "House",
+        price: 4500000
+    },
+    {
+        name: "Residential Land",
+        location: "Bangalore",
+        type: "Land",
+        price: 2000000
+    },
+    {
+        name: "Modern Apartment",
+        location: "Hyderabad",
+        type: "Apartment",
+        price: 3500000
+    },
+    {
+        name: "Budget House",
+        location: "Chennai",
+        type: "House",
+        price: 2500000
+    }
+];
+
+function displayProperties(list) {
+    const container = document.getElementById("properties");
+    const message = document.getElementById("message");
+
+    container.innerHTML = "";
+    message.textContent = "";
+
+    if (list.length === 0) {
+        message.textContent = "No matching properties found.";
+        return;
+    }
+
+    list.forEach(property => {
+        container.innerHTML += `
+            <div class="card">
+                <h3>${property.name}</h3>
+                <p>Location: ${property.location}</p>
+                <p>Type: ${property.type}</p>
+                <p>Price: ₹${property.price.toLocaleString("en-IN")}</p>
+                <button onclick="viewProperty('${property.name}')">
+                    View Details
+                </button>
+            </div>
+        `;
+    });
+}
+
+function searchProperties() {
+    const location = document.getElementById("location")
+        .value.trim().toLowerCase();
+
+    const type = document.getElementById("type").value;
+    const budget = document.getElementById("budget").value;
+
+    const filtered = properties.filter(property =>
+        property.location.toLowerCase().includes(location) &&
+        (type === "all" || property.type === type) &&
+        (budget === "" || property.price <= Number(budget))
+    );
+
+    displayProperties(filtered);
+}
+
+function viewProperty(name) {
+    const property = properties.find(p => p.name === name);
+
+    alert(
+        "Property: " + property.name +
+        "\nLocation: " + property.location +
+        "\nType: " + property.type +
+        "\nPrice: ₹" + property.price.toLocaleString("en-IN")
+    );
+}
+
+displayProperties(properties);
+
+RESULT
+Thus, the Home Finder website was designed and implemented successfully. Users can search for properties based on location, property type, and budget, and view the details of matching properties.
